@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<jsp:include page="includes/header.html"/>
+<jsp:include page="includes/header.jsp"/>
     <h1>Register success</h1><br>
     <table cellspace="5" border="0">
         <tr align="right">

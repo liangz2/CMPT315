@@ -4,7 +4,7 @@ and open the template in the editor.
 -->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<jsp:include page="/includes/header.html"/>
+<jsp:include page="/includes/header.jsp"/>
     <div>
         <h1>Password successfully updated</h1><br>
         <p><a href="logged_in_index.jsp">[Back to Project Selection]</a></p>

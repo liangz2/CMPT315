@@ -6,13 +6,10 @@
 <%@page import="business.Project"%>
 <%@page import="java.util.ArrayList"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<jsp:include page="/includes/header.html"/>
+
+<jsp:include page="/includes/header.jsp"/>
 <jsp:useBean id="user" scope="session" class="business.User"/>
-<%
-    ArrayList<Project> projects = user.getProjects();
-%>
+
 <h1>Welcome ${user.firstName}</h1>
 <font size="2"><a href="password_update.jsp">[Update Password]</a>
 <a href="info_updat.jsp">[Update Personal Info]</a></font>
@@ -43,10 +40,8 @@
                 <p id="description"></p>
                 <script type="text/javascript">
                     function showDetail (object) {
-                        var index = object.selectIndex;
-                        document.getElementById("description").innerHTML =
-                        ${projects.get(index).role}; //object.options[object.selectedIndex].value;
-                        
+                        document.getElementById("description").innerHTML = 
+                            object.options[object.selectedIndex].value;
                     }
                 </script>
             

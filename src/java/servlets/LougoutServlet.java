@@ -42,6 +42,8 @@ public class LougoutServlet extends HttpServlet {
             request.setAttribute("error", "You are not logged in");
         else {
             session.removeAttribute("user");
+            session.removeAttribute("activeProjects");
+            session.removeAttribute("erro");
             url = "/logged_out.jsp";
         }
         RequestDispatcher dispatcher = 

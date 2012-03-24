@@ -73,6 +73,7 @@ public class Project implements Serializable {
                 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                + "&nbsp;&nbsp;"
                 + "[" + role + "]"; 
     }
 }

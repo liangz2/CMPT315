@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<jsp:include page="/includes/header.html"/>
+<jsp:include page="/includes/header.jsp"/>
     <h1>Welcome ${user.firstName}, update your password</h1><br>
     <form name="passUpdate" action="password" method="post" onsubmit="return matchPassword (this)">
         <table cellspacing="5" border="0">

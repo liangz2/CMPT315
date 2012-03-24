@@ -14,7 +14,7 @@
 </font>
 <br><br><br>
 <c:if test="${user != null}">
-    <a href="logout">[Logout]</a>
+    <a href="logout">[Logout ${user.email}]</a>
 </c:if>
 <br><br>
 <p><small>
