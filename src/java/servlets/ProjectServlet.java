@@ -78,7 +78,7 @@ public class ProjectServlet extends HttpServlet {
                 p.setId(Integer.parseInt(resultSet.getString(1)));
                 p.setName(resultSet.getString(2));
                 p.setDescription(resultSet.getString(3));
-                p.setRole(resultSet.getString(4));
+                p.setMyRole(resultSet.getString(4));
                 // add projects to the user for future usage
                 user.addProject(p);
             }

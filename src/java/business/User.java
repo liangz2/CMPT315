@@ -25,6 +25,10 @@ public class User implements Serializable {
         password = "";
         projects = new ArrayList<Project>();
     }
+    
+    public User (String firstName, String lastName, String email, String password) {
+        
+    }
 
     public ArrayList<Project> getProjects() {
         return projects;

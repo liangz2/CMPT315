@@ -5,6 +5,7 @@
 package business;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,22 +16,32 @@ public class Project implements Serializable {
     private int userID;
     private String name;
     private String description;
-    private String role;
+    private String myRole;
+    private ArrayList<User> users;
+
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public void addUsers(User user) {
+        this.users.add(user);
+    }
     
     public Project () {
         name = "";
         id = -1;
         userID = -1;
         description = "";
-        role = "";
+        myRole = "";
+        users = new ArrayList<User>();
     }
 
     public int getUserID() {
         return userID;
     }
 
-    public String getRole() {
-        return role;
+    public String getMyRole() {
+        return myRole;
     }
 
     public String getDescription() {
@@ -49,8 +60,8 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setMyRole(String mymyRole) {
+        this.myRole = mymyRole;
     }
 
     public void setUserID(int userID) {
@@ -73,7 +84,8 @@ public class Project implements Serializable {
                 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                + "&nbsp;&nbsp;"
-                + "[" + role + "]"; 
+                + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                + "[" + myRole + "]"; 
     }
 }

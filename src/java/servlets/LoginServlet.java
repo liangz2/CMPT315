@@ -38,6 +38,7 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String url = "";
         ServletContext sc = getServletContext();
+        HttpSession session = request.getSession();
         ResultSet resultSet = null;
         Statement statement = null;
         Connection connection = null;

@@ -32,6 +32,10 @@
         <servlet-name>LougoutServlet</servlet-name>
         <servlet-class>servlets.LougoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <servlet-class>servlets.ProjectDetailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProjectNameServlet</servlet-name>
         <url-pattern>/displayProjects</url-pattern>
@@ -48,6 +52,10 @@
         <servlet-name>LougoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProjectDetailServlet</servlet-name>
+        <url-pattern>/ProjectDetailServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -58,6 +66,4 @@
             login.jsp
         </welcome-file>
     </welcome-file-list>
-
-
 </web-app>
