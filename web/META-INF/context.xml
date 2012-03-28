@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/WIKI_Project">
-    
     <Resource name="jdbc/wiki" auth="Container"
         maxActive="100" maxIdle="30" maxWait="1000"
         username="root" password="sesame"

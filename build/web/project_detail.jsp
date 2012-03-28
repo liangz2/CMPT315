@@ -20,6 +20,7 @@
     ${selectedProject.description}
     <br><br>
     <c:choose>
+        <form action="" method="post">
         <c:when test="${selectedProject.myRole != 'Pending' && selectedProject.myRole != 'N/A'}">
             <font color="green">Here are currently active users in the project</font>
             <table cellspace="2" border="1">
@@ -33,13 +34,17 @@
                         <td>${user.firstName}</td>
                         <td>${user.lastName}</td>
                         <td>${user.email}</td>
+                        <c:if test="${selectedProject.myRole == 'Admin'}">
+                            <td><input name="${user.email}" type="checkbox"></td>
+                        </c:if>
                     </tr>
                 </c:forEach>
             </table>
         </c:when>
-        <c:otherwise>
-
-        </c:otherwise>
+        <c:if test="${selectedProject.myRole == 'Admin'}">
+            <input type="submit" value="Remove Selected Users" />
+        </c:if>
+        </form>
     </c:choose>
     
             <p><font size="2"><a href="logged_in_index.jsp">Back to project selection page</a></font></p>

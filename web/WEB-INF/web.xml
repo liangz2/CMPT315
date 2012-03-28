@@ -36,6 +36,10 @@
         <servlet-name>ProjectDetailServlet</servlet-name>
         <servlet-class>servlets.ProjectDetailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RemoveUserServlet</servlet-name>
+        <servlet-class>servlets.RemoveUserServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProjectNameServlet</servlet-name>
         <url-pattern>/displayProjects</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>ProjectDetailServlet</servlet-name>
         <url-pattern>/projectDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveUserServlet</servlet-name>
+        <url-pattern>/removeUser</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
