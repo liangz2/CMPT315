@@ -5,6 +5,7 @@
 package servlets;
 
 import business.User;
+import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -42,18 +43,24 @@ public class LoginServlet extends HttpServlet {
         ResultSet resultSet = null;
         Statement statement = null;
         Connection connection = null;
+        Connection pConnection = null;
         
         try {
             /*
              * TODO output your page here. You may use following sample code 
              */
+            ConnectionPool pool = ConnectionPool.getInstance();
+            pConnection = pool.getConnection();
+            /*
             connection = 
                     DriverManager.getConnection (sc.getInitParameter ("dbURL"),
                     sc.getInitParameter ("dbUserName"), 
                     sc.getInitParameter ("dbPassword"));
             
+            * 
+            */
             // create the statement object
-            statement = connection.createStatement ();
+            statement = pConnection.createStatement ();
             
             // obtain login info
             String emailAddress = (String) request.getParameter ("emailAddress");
@@ -81,7 +88,7 @@ public class LoginServlet extends HttpServlet {
             }
             
             statement.close ();            
-            connection.close ();
+            pool.freeConnection(pConnection);
             resultSet.close ();
             RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
             dispatcher.forward (request, response);

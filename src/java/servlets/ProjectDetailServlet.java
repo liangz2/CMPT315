@@ -40,7 +40,10 @@ public class ProjectDetailServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Connection connection = null;
         ResultSet resultSet = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
+        String query = "select firstname, lastname, emailaddress,"
+                    + " from wikirecord inner join user on user.emailaddress="
+                    + "wikirecord.useremail where projectid='?'";
         try {
             /*
              * TODO output your page here. You may use following sample code.
@@ -49,16 +52,15 @@ public class ProjectDetailServlet extends HttpServlet {
                     DriverManager.getConnection (sc.getInitParameter ("dbURL"),
                     sc.getInitParameter ("dbUserName"), 
                     sc.getInitParameter ("dbPassword"));
-            
             // create the statement object
-            statement = connection.createStatement ();
+            statement = connection.prepareStatement(query);
             
             int projectID = Integer.parseInt((String) request.getAttribute("projectID"));
             User user = (User) session.getAttribute("user");
             
-            resultSet = statement.executeQuery("select firstname, lastname, emailaddress,"
-                    + " from wikirecord inner join user on user.emailaddress="
-                    + "wikirecord.useremail where projectid='" + projectID + "'");
+            statement.setString(1, ((String) request.getAttribute("projectID")));
+            
+            resultSet = statement.executeQuery();
             
             while (resultSet.next()) {
                 for (Project project: user.getProjects()) {
@@ -73,10 +75,10 @@ public class ProjectDetailServlet extends HttpServlet {
         } catch (SQLException ex) {
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProjectDetailServlet</title>");            
+            out.println("<title>SQLException Caught</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProjectDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProjectDetailServlet at " + ex.getLocalizedMessage() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         } finally {     
