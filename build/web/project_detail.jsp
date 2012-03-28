@@ -21,7 +21,7 @@
     <br><br>
     <c:choose>
         <c:when test="${selectedProject.myRole != 'Pending' && selectedProject.myRole != 'N/A'}">
-            <font color="green">Here are the users currently active in the project</font>
+            <font color="green">Here are currently active users in the project</font>
             <table cellspace="2" border="1">
                 <tr align="center">
                     <td style="width:120px">First Name</td>
@@ -30,9 +30,9 @@
                 </tr>
                 <c:forEach var="user" items="${selectedProject.users}">
                     <tr align="center">
-                        <td>user.firstName</td>
-                        <td>user.lastName</td>
-                        <td>user.email</td>
+                        <td>${user.firstName}</td>
+                        <td>${user.lastName}</td>
+                        <td>${user.email}</td>
                     </tr>
                 </c:forEach>
             </table>

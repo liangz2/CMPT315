@@ -27,7 +27,10 @@ public class User implements Serializable {
     }
     
     public User (String firstName, String lastName, String email, String password) {
-        
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.password = "";
     }
 
     public ArrayList<Project> getProjects() {

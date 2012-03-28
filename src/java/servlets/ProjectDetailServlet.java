@@ -74,6 +74,7 @@ public class ProjectDetailServlet extends HttpServlet {
                         users.add(new User(resultSet.getString(1), resultSet.getString(2),
                                 resultSet.getString(3),""));
                         project.setUsers(users);
+                        break;
                     }
                 }
             }
