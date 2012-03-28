@@ -6,9 +6,12 @@ package servlets;
 
 import business.Project;
 import business.User;
+import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,43 +38,54 @@ public class ProjectDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = "";
+        String url = "/project_detail.jsp";
         ServletContext sc = request.getServletContext();
         HttpSession session = request.getSession();
         Connection connection = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;
-        String query = "select firstname, lastname, emailaddress,"
+        Project selectedProject = null;
+        String query = "select firstname, lastname, emailaddress"
                     + " from wikirecord inner join user on user.emailaddress="
-                    + "wikirecord.useremail where projectid='?'";
+                    + "wikirecord.useremail where projectid=?";
         try {
             /*
              * TODO output your page here. You may use following sample code.
              */
-            connection = 
-                    DriverManager.getConnection (sc.getInitParameter ("dbURL"),
-                    sc.getInitParameter ("dbUserName"), 
-                    sc.getInitParameter ("dbPassword"));
+            ConnectionPool pool = ConnectionPool.getInstance();
+            connection = pool.getConnection();
             // create the statement object
             statement = connection.prepareStatement(query);
             
-            int projectID = Integer.parseInt((String) request.getAttribute("projectID"));
+            String pID = request.getParameter("projectID");
+            int projectID = Integer.parseInt(pID);
             User user = (User) session.getAttribute("user");
             
-            statement.setString(1, ((String) request.getAttribute("projectID")));
+            statement.setString(1, pID);
             
             resultSet = statement.executeQuery();
+            
+            ArrayList<User> users = new ArrayList<User>();
             
             while (resultSet.next()) {
                 for (Project project: user.getProjects()) {
                     if (project.getId() == projectID) {
-                        project.addUsers(new User(resultSet.getString(1), resultSet.getString(2),
+                        selectedProject = project;
+                        users.add(new User(resultSet.getString(1), resultSet.getString(2),
                                 resultSet.getString(3),""));
+                        project.setUsers(users);
                     }
                 }
             }
             
+            statement.close();
+            resultSet.close();
+            pool.freeConnection(connection);
             
+            request.setAttribute("selectedProject", selectedProject);
+            
+            RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
+            dispatcher.forward (request, response);
         } catch (SQLException ex) {
             out.println("<html>");
             out.println("<head>");

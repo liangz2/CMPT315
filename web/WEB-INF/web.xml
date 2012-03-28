@@ -29,8 +29,8 @@
         <servlet-class>servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LougoutServlet</servlet-name>
-        <servlet-class>servlets.LougoutServlet</servlet-class>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>servlets.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProjectDetailServlet</servlet-name>
@@ -49,12 +49,12 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LougoutServlet</servlet-name>
+        <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProjectDetailServlet</servlet-name>
-        <url-pattern>/ProjectDetailServlet</url-pattern>
+        <url-pattern>/projectDetail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -51,15 +51,7 @@ public class LoginServlet extends HttpServlet {
              */
             ConnectionPool pool = ConnectionPool.getInstance();
             pConnection = pool.getConnection();
-            /*
-            connection = 
-                    DriverManager.getConnection (sc.getInitParameter ("dbURL"),
-                    sc.getInitParameter ("dbUserName"), 
-                    sc.getInitParameter ("dbPassword"));
             
-            * 
-            */
-            // create the statement object
             statement = pConnection.createStatement ();
             
             // obtain login info

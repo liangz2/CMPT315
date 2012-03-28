@@ -23,8 +23,8 @@ public class Project implements Serializable {
         return users;
     }
 
-    public void addUsers(User user) {
-        this.users.add(user);
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
     }
     
     public Project () {

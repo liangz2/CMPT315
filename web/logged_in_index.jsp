@@ -11,12 +11,11 @@
 <jsp:include page="/includes/header.jsp"/>
 <%
     int id = 0;
-    //User user = (User) request.getSession().getAttribute("user");
 %>
 <h1>Welcome ${user.firstName}</h1>
 <font size="2"><a href="password_update.jsp">[Update Password]</a>
 <a href="info_updat.jsp">[Update Personal Info]</a></font>
-<form action="project_detail.jsp" method="post">
+<form action="projectDetail" method="post" onsubmit="return getIndex(this)">
     <table id="projects" cellspacing="5" border="0">
         <tr align="center">
             <td><h4>Currently active projects</h4></td>
@@ -33,7 +32,7 @@
             </td>
             <td></td>
             <td>
-                <select name="myProjects" id="myProjects" style="width:250px; height:100px" name="inProject" size="${user.projects.size()}" onchange="showDetail(this)">
+                <select name="projectID" style="width:250px; height:100px" name="inProject" size="${user.projects.size()}" onchange="showDetail(this)">
                     <c:forEach var="project" items="${user.projects}">
                         <option value="${project.id}">${project}</option>
                     </c:forEach>
@@ -45,7 +44,7 @@
     </c:forEach>
     <p>Project Description </p>
     <p id="description"></p>
-    <input type="button" value="Get Index" onclick="showDetail (document.getElementById('myProjects'))"/>
+    <input type="submit" value="View Project"/>
 </form>
                     
     <script type="text/javascript">
@@ -55,7 +54,11 @@
                 document.getElementById(index).value;
         }
         function getIndex (object) {
-            return object.myProjects.selectedIndex;
+            if (object.projectID.selectedIndex < 0) {
+                alert ('Please select a project that you are currently in');
+                return false;
+            }
+            return true;
         }
     </script>
 <%--
