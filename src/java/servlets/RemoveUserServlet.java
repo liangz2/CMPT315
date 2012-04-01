@@ -4,8 +4,14 @@
  */
 package servlets;
 
+import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,16 +39,50 @@ public class RemoveUserServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Connection connection = null;
+        String url = "/projectDetail";
+        String query = "delete from wikirecord where useremail=? and projectid=?";
+        ResultSet resultSet = null;
+        PreparedStatement statement = null;
         try {
             /*
              * TODO output your page here. You may use following sample code.
              */
+            ConnectionPool pool = ConnectionPool.getInstance();
+            connection = pool.getConnection();
+            
+            String projectID = (String) request.getAttribute("projectID");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet RemoveUserServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RemoveUserServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet RemoveUserServlet at " + projectID + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+            String[] emails = request.getParameterValues("removeEmail");
+            statement.setString(2, projectID);
+            statement = connection.prepareStatement(query);
+
+            for (int i = 0; i < emails.length; i++) {
+                statement.setString(1, emails[i]);
+                statement.executeUpdate();
+            }
+            
+            statement.close();
+            pool.freeConnection(connection);
+            
+            request.setAttribute("projectID", projectID);
+            RequestDispatcher dispatcher = 
+                    request.getServletContext().getRequestDispatcher (url);
+            //dispatcher.forward (request, response);
+        } catch (SQLException ex) {
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet RemoveUserServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet RemoveUserServlet at " + ex.getLocalizedMessage() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         } finally {            

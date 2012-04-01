@@ -6,6 +6,7 @@ package servlets;
 
 import business.Project;
 import business.User;
+import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -39,6 +40,7 @@ public class ProjectServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         ArrayList<Project> activeProjects = new ArrayList<Project>();
+        Connection connection = null;
         try {
             /*
              * TODO output your page here. You may use following sample code.
@@ -48,10 +50,8 @@ public class ProjectServlet extends HttpServlet {
                     + "from project where projectisactive=true";
 
             // connect to data base
-            Connection connection = 
-                    DriverManager.getConnection (sc.getInitParameter("dbURL"),
-                    sc.getInitParameter("dbUserName"), 
-                    sc.getInitParameter("dbPassword"));
+            ConnectionPool pool = ConnectionPool.getInstance();
+            connection = pool.getConnection();
             
             // obtain the user info to query for projects
             User user = (User) request.getAttribute("user");
@@ -80,7 +80,7 @@ public class ProjectServlet extends HttpServlet {
                 p.setDescription(resultSet.getString(3));
                 p.setMyRole(resultSet.getString(4));
                 // add projects to the user for future usage
-                user.addProject(p);
+                user.addProject(p.getId(), p);
             }
             resultSet.close ();
             statement.close ();
@@ -91,7 +91,7 @@ public class ProjectServlet extends HttpServlet {
             session.setAttribute ("activeProjects", activeProjects);
 
             RequestDispatcher dispatcher = 
-                    sc.getRequestDispatcher ("/logged_in_index.jsp");
+                    sc.getRequestDispatcher ("/index.jsp");
             dispatcher.forward (request, response);
         } catch (SQLException ex) {
             out.println("<html>");

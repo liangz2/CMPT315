@@ -43,7 +43,7 @@ public class LogoutServlet extends HttpServlet {
         else {
             session.removeAttribute("user");
             session.removeAttribute("activeProjects");
-            session.removeAttribute("erro");
+            session.removeAttribute("error");
             url = "/logged_out.jsp";
         }
         RequestDispatcher dispatcher = 

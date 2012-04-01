@@ -57,34 +57,41 @@ public class ProjectDetailServlet extends HttpServlet {
             // create the statement object
             statement = connection.prepareStatement(query);
             
-            String pID = request.getParameter("projectID");
-            int projectID = Integer.parseInt(pID);
+            String pId = request.getParameter("projectId");
+            if (pId == null)
+                pId = (String) request.getAttribute("projectId");
+            
+            int projectId = Integer.parseInt(pId);
             User user = (User) session.getAttribute("user");
             
-            statement.setString(1, pID);
+            statement.setString(1, pId);
             
             resultSet = statement.executeQuery();
             
             ArrayList<User> users = new ArrayList<User>();
             
             while (resultSet.next()) {
-                for (Project project: user.getProjects()) {
-                    if (project.getId() == projectID) {
-                        selectedProject = project;
-                        users.add(new User(resultSet.getString(1), resultSet.getString(2),
-                                resultSet.getString(3),""));
+                /*
+                for (Project project: user.getProjects().values()) {
+                    if (project.getId() == projectId) {
+                        
                         project.setUsers(users);
+                        user.setSelectedProjectId(projectId);
                         break;
                     }
                 }
+                * 
+                */
+                users.add(new User(resultSet.getString(1), resultSet.getString(2),
+                                resultSet.getString(3),""));
             }
+            
+            user.setSelectedProject(projectId);
+            user.getSelectedProject().setUsers(users);
             
             statement.close();
             resultSet.close();
             pool.freeConnection(connection);
-            
-            request.setAttribute("selectedProject", selectedProject);
-            
             RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
             dispatcher.forward (request, response);
         } catch (SQLException ex) {

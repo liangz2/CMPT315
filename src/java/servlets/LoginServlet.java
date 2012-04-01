@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -39,20 +38,18 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String url = "";
         ServletContext sc = getServletContext();
-        HttpSession session = request.getSession();
         ResultSet resultSet = null;
         Statement statement = null;
         Connection connection = null;
-        Connection pConnection = null;
         
         try {
             /*
              * TODO output your page here. You may use following sample code 
              */
             ConnectionPool pool = ConnectionPool.getInstance();
-            pConnection = pool.getConnection();
+            connection = pool.getConnection();
             
-            statement = pConnection.createStatement ();
+            statement = connection.createStatement ();
             
             // obtain login info
             String emailAddress = (String) request.getParameter ("emailAddress");
@@ -80,7 +77,7 @@ public class LoginServlet extends HttpServlet {
             }
             
             statement.close ();            
-            pool.freeConnection(pConnection);
+            pool.freeConnection(connection);
             resultSet.close ();
             RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
             dispatcher.forward (request, response);

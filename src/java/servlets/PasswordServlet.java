@@ -5,9 +5,13 @@
 package servlets;
 
 import business.User;
+import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -48,15 +52,12 @@ public class PasswordServlet extends HttpServlet {
         ResultSet resultSet = null;
         Statement statement = null;
         Connection connection = null;
-        String oldPass = "";
         try {
             /*
              * TODO output your page here. You may use following sample code 
              */
-            connection = 
-                    DriverManager.getConnection (sc.getInitParameter ("dbURL"),
-                    sc.getInitParameter ("dbUserName"), 
-                    sc.getInitParameter ("dbPassword"));
+            ConnectionPool pool = ConnectionPool.getInstance();
+            connection = pool.getConnection();
             
             // create the statement object
             statement = connection.createStatement ();

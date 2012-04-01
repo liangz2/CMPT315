@@ -4,49 +4,79 @@
     Author     : Zhengyi
 --%>
 
-<%@page import="business.Project"%>
-<%@page import="java.util.ArrayList"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <jsp:include page="/includes/header.jsp"/>
-<jsp:useBean id="selectedProject" scope="request" class="business.Project" />
-
-<h1>Project#: ${selectedProject.id} - ${selectedProject.name}<br>
-    <font size="4">Your role in this project: ${selectedProject.myRole}
+<jsp:useBean id="user" scope="session" class="business.User" />
+<h1>Project#  ${user.selectedProject.id} -  ${user.selectedProject.name}<br>
+    <font size="4">Your role in this project:  ${user.selectedProject.myRole}
 </h1>
+
+<p><font size="2"><a href="index.jsp">Back to project selection page</a></font></p>
 <h3>
     Project Description
 </h3>
-    ${selectedProject.description}
+<p style="border:ridge; width:350px;" align="left">${user.selectedProject.description}</p>
     <br><br>
     <c:choose>
-        <form action="" method="post">
-        <c:when test="${selectedProject.myRole != 'Pending' && selectedProject.myRole != 'N/A'}">
+        <c:when test="${user.selectedProject.myRole != 'Pending' && user.selectedProject.myRole != 'N/A'}">
             <font color="green">Here are currently active users in the project</font>
+            <form action="removeUser" method="post" onsubmit="return getUser(this)">
             <table cellspace="2" border="1">
                 <tr align="center">
                     <td style="width:120px">First Name</td>
                     <td style="width:120px">Last Name</td>
                     <td>Email Address</td>
+                    <c:if test="${user.selectedProject.myRole == 'Admin'}">
+                        <td>Remove</td>
+                    </c:if>
                 </tr>
-                <c:forEach var="user" items="${selectedProject.users}">
+                <c:forEach var="u" items="${user.selectedProject.users}">
                     <tr align="center">
-                        <td>${user.firstName}</td>
-                        <td>${user.lastName}</td>
-                        <td>${user.email}</td>
-                        <c:if test="${selectedProject.myRole == 'Admin'}">
-                            <td><input name="${user.email}" type="checkbox"></td>
+                        <td>${u.firstName}</td>
+                        <td>${u.lastName}</td>
+                        <td>${u.email}</td>
+                        <c:if test="${user.selectedProject.myRole == 'Admin'}">
+                            <td><input name="removeEmail" type="checkbox" value="${u.email}"/></td>
                         </c:if>
                     </tr>
                 </c:forEach>
             </table>
+            <c:if test="${user.selectedProject.myRole == 'Admin'}">
+                <p><input type="submit" value="Remove Selected Users" /></p>
+            </c:if>    
+            </form>
         </c:when>
-        <c:if test="${selectedProject.myRole == 'Admin'}">
-            <input type="submit" value="Remove Selected Users" />
-        </c:if>
-        </form>
     </c:choose>
     
-            <p><font size="2"><a href="logged_in_index.jsp">Back to project selection page</a></font></p>
+<script type="text/javascript">
+    function getUser(object) {
+        var emails = object.removeEmail;
+        var users = '';
+        var isChecked = false;
+        var r;
+        
+        for (i=0; i<emails.length; i++) {
+            if (emails.item(i).checked == true) {
+                users += emails.item(i).value + '\n';
+                if (!isChecked)
+                    isChecked = true;
+            }
+        }
+        if (isChecked) {
+            r = confirm ('Are you sure you want to remove the following user(s) from this project?\n' 
+                +  users);
+            
+            if (r == true) {
+                return true;
+            }
+            else
+                return false;
+        }
+            
+        alert ('You must select at least one user to continue.')
+        return false;
+    }
+</script>
 
 <jsp:include page="includes/footer.jsp"/>

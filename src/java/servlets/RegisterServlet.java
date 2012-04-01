@@ -4,6 +4,7 @@
  */
 package servlets;
 
+import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -46,10 +47,8 @@ public class RegisterServlet extends HttpServlet {
         String password = (String) request.getParameter ("p1");
         try {
             // connect to data base
-            connection = 
-                    DriverManager.getConnection (sc.getInitParameter ("dbURL"),
-                    sc.getInitParameter ("dbUserName"), 
-                    sc.getInitParameter ("dbPassword"));
+            ConnectionPool pool = ConnectionPool.getInstance();
+            connection = pool.getConnection();
             
             // create the statement object
             statement = connection.createStatement ();

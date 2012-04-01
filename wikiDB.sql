@@ -54,7 +54,7 @@ INSERT INTO User VALUES
 
 CREATE TABLE Role (
 	RoleID INT NOT NULL,
-	RoleName VARCHAR(15) NOT NULL,
+	RoleName VARCHAR (15) NOT NULL,
 	
 	PRIMARY KEY (RoleName)
 );
@@ -72,9 +72,9 @@ INSERT INTO Role VALUES
 * record table that keeps track of user with projects
 ***********************************************/
 CREATE TABLE WIKIRecord (
-	UserEmail VARCHAR(50) NOT NULL,
+	UserEmail VARCHAR (50) NOT NULL,
 	ProjectID INT NOT NULL,
-	Role VARCHAR(15) NOT NULL,
+	Role VARCHAR (15) NOT NULL,
 	
 	PRIMARY KEY (ProjectID, UserEmail),
 	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID),
@@ -88,3 +88,14 @@ INSERT INTO WIKIRecord VALUES
 ('hahaha2009@hotmail.com', '3', 'Admin'),
 ('ivy_onlyone@hotmail.com', '1', 'Coord'),
 ('evffegg@gmail.com', '1', 'Contri');
+
+CREATE TABLE RequestTable (
+	UserID VARCHAR (50) NOT NULL,
+	ProjectID INT NOT NULL,
+	RequestRole VARCHAR (15) NOT NULL,
+	
+	PRIMARY KEY (UserID),
+	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID),
+	FOREIGN KEY (RequestRole) REFERENCES Role (RoleName)
+);
+
