@@ -21,23 +21,34 @@
     <c:choose>
         <c:when test="${user.selectedProject.myRole != 'Pending' && user.selectedProject.myRole != 'N/A'}">
             <font color="green">Here are currently active users in the project</font>
-            <form action="removeUser" method="post" onsubmit="return getUser(this)">
+            <form action="removeUser" method="post" onsubmit="return getUser()">
             <table cellspace="2" border="1">
                 <tr align="center">
                     <td style="width:120px">First Name</td>
                     <td style="width:120px">Last Name</td>
                     <td>Email Address</td>
+                    <td>Role</td>
                     <c:if test="${user.selectedProject.myRole == 'Admin'}">
                         <td>Remove</td>
                     </c:if>
                 </tr>
                 <c:forEach var="u" items="${user.selectedProject.users}">
-                    <tr align="center">
+                    <c:choose>
+                        <c:when test="${u.email == user.email}" ><tr align="center" style="color:red"></c:when>
+                        <c:otherwise><tr align="center"></c:otherwise>
+                    </c:choose>
                         <td>${u.firstName}</td>
                         <td>${u.lastName}</td>
                         <td>${u.email}</td>
+                        <td>${u.relativeRole}</td>
                         <c:if test="${user.selectedProject.myRole == 'Admin'}">
-                            <td><input name="removeEmail" type="checkbox" value="${u.email}"/></td>
+                            <td>
+                                <input name="removeEmail"
+                                       <c:if test="${u.email == user.email}">
+                                       disabled="true"
+                                       </c:if>
+                                       type="checkbox" value="${u.email}"/>
+                            </td>
                         </c:if>
                     </tr>
                 </c:forEach>
@@ -50,28 +61,30 @@
     </c:choose>
     
 <script type="text/javascript">
-    function getUser(object) {
-        var emails = object.removeEmail;
+    function getUser() {
+        var emails = document.getElementsByName("removeEmail");
         var users = '';
         var isChecked = false;
         var r;
-        
-        for (i=0; i<emails.length; i++) {
-            if (emails.item(i).checked == true) {
-                users += emails.item(i).value + '\n';
-                if (!isChecked)
-                    isChecked = true;
+
+        if (emails != null) {
+            for (i=0; i<emails.length; i++) {
+                if (emails.item(i).checked == true) {
+                    users += emails.item(i).value + '\n';
+                    if (!isChecked)
+                        isChecked = true;
+                }
             }
-        }
-        if (isChecked) {
-            r = confirm ('Are you sure you want to remove the following user(s) from this project?\n' 
-                +  users);
-            
-            if (r == true) {
-                return true;
+            if (isChecked) {
+                r = confirm ('Are you sure you want to remove the following user(s) from this project?\n' 
+                    +  users);
+
+                if (r == true) {
+                    return true;
+                }
+                else
+                    return false;
             }
-            else
-                return false;
         }
             
         alert ('You must select at least one user to continue.')

@@ -5,7 +5,6 @@
 package business;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -19,6 +18,7 @@ public class User implements Serializable {
     private String password;
     private Project selectedProject;
     private HashMap<Integer, Project> projects;
+    private String relativeRole;
 
     public User () {
         lastName = "";
@@ -28,11 +28,16 @@ public class User implements Serializable {
         projects = new HashMap<Integer, Project>();
     }
     
-    public User (String firstName, String lastName, String email, String password) {
+    public User (String firstName, String lastName, String email, String relativeRole, String password) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
+        this.relativeRole = relativeRole;
         this.password = "";
+    }
+
+    public String getRelativeRole() {
+        return relativeRole;
     }
 
     public Project getSelectedProject() {
@@ -81,6 +86,10 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRelativeRole(String relativeRole) {
+        this.relativeRole = relativeRole;
     }
 
     public void setSelectedProject(int pId) {

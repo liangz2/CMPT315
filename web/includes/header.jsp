@@ -19,7 +19,12 @@
     <head>
         <title>WIKI Project Management</title>
         <style type="text/css">
-            h1 {vertical-align:central; height:100px; background-color:silver; color:azure}
+            h1 {
+                text-align:center; 
+                height:100px; 
+                background-color:silver; 
+                color:azure
+            }
         </style>    
     </head>
 

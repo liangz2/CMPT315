@@ -46,8 +46,8 @@ public class ProjectServlet extends HttpServlet {
              * TODO output your page here. You may use following sample code.
              */
             ServletContext sc = this.getServletContext();
-            String sqlStatement = "select projectname, projectdescription "
-                    + "from project where projectisactive=true";
+            String sqlStatement = "select projectname, projectdescription, "
+                    + "projectid from project where projectisactive=true";
 
             // connect to data base
             ConnectionPool pool = ConnectionPool.getInstance();
@@ -64,6 +64,7 @@ public class ProjectServlet extends HttpServlet {
                 Project p = new Project ();
                 p.setName (resultSet.getString(1));
                 p.setDescription (resultSet.getString (2));
+                p.setId(Integer.parseInt(resultSet.getString(3)));
                 activeProjects.add(p);
             }
             
@@ -85,7 +86,7 @@ public class ProjectServlet extends HttpServlet {
             resultSet.close ();
             statement.close ();
             connection.close ();
-                   
+                  
             HttpSession session = request.getSession ();
             session.setAttribute ("user", user);
             session.setAttribute ("activeProjects", activeProjects);

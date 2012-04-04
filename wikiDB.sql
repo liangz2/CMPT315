@@ -95,7 +95,10 @@ CREATE TABLE RequestTable (
 	RequestRole VARCHAR (15) NOT NULL,
 	
 	PRIMARY KEY (UserID),
-	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID),
+	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID) ON DELETE CASCADE,
 	FOREIGN KEY (RequestRole) REFERENCES Role (RoleName)
 );
 
+INSERT INTO RequestTable VALUES
+('ivy_onlyone@hotmail.com', '1', 'Coord'),
+('evffegg@gmail.com', '1', 'Contri');

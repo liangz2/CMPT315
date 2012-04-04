@@ -10,59 +10,73 @@
 
 <jsp:include page="/includes/header.jsp"/>
 <%
-    int id = 0;
     User user = (User) request.getSession().getAttribute("user");
-    ArrayList<Project> projects = new ArrayList(user.getProjects().values());
+    ArrayList<Project> currentProjects = new ArrayList(user.getProjects().values());
 %>
 <h1>Welcome ${user.firstName}</h1>
 <font size="2"><a href="password_update.jsp">[Update Password]</a>
 <a href="info_updat.jsp">[Update Personal Info]</a></font>
+<table id="activeProjects" cellspacing="2" border="0">
+    <tr align="center">
+        <td><h4>Currently Active Projects</h4></td>
+        <td><h4>Description</h4>
+    </tr>
+    <tr align="center">
+        <td>
+            <select style="width:250px; height:121px" name="activeProject" size="${activeProjects.size()}" onchange="showDetail(this, 'apDescription')">
+                <c:forEach var="activeProject" items="${activeProjects}">
+                    <option value="${activeProject.id}">${activeProject.name}</option>
+                </c:forEach>
+            </select>
+        </td>
+        <td>
+            <textarea disabled="true" style="resize: none; background-color: white; color: black" 
+                      wrap="true" id="apDescription" rows="7" cols="30"></textarea>
+        </td>
+    </tr>
+</table>
 <form action="projectDetail" method="post" onsubmit="return getIndex(this)">
-    <table id="projects" cellspacing="5" border="0">
-        <tr align="center">
-            <td><h4>Currently active projects</h4></td>
-            <td></td>
-            <td><h4>Projects you are in</h4></td>
-        </tr>
-        <tr align="center">
-            <td>
-                <select style="width:250px; height:100px" name="activeProject" size="${activeProjects.size()}" onchange="showDetail(this)">
-                    <c:forEach var="project" items="${activeProjects}">
-                        <option value="${project.id}">${project.name}</option>
-                    </c:forEach>
-                </select>
-            </td>
-            <td></td>
-            <td>
-                <select name="projectId" style="width:250px; height:100px" size="${user.projects.size()}" onchange="showDetail(this)">
-                    <c:forEach var="project" items="<%= projects %>">
-                        <option value="${project.id}">${project}</option>
-                    </c:forEach>
-                </select>
-            </td>
-    </table>
-    <c:forEach var="project" items="<%=projects%>">
-        <input type="hidden" id="<%= id++ %>" value="${project.description}"/>
-    </c:forEach>
-    <p>Project Description </p>
-    <p id="description"></p>
-    <input type="submit" value="View Project"/>
+<table id="currentProjects" cellspacing="2" border="0">
+    <tr align="center">
+        <td><h4>Projects you are in</h4></td>
+        <td><h4>Description</h4></td>
+    </tr>
+    <tr align="center">
+        <td>
+            <select name="projectId" style="width:250px; height:121px; " size="<%= currentProjects.size() %>" onchange="showDetail(this, 'cpDescription')">
+                <c:forEach var="currentProject" items="<%= currentProjects %>">
+                    <option value="${currentProject.id}">${currentProject}</option>
+                </c:forEach>
+            </select>
+        </td>
+        <td>
+            <textarea disabled="true" style="resize: none; background-color: white; color: black" 
+                      wrap="true" id="cpDescription" rows="7" cols="30">
+
+            </textarea>
+        </td>
+    </tr>
+</table>
+<c:forEach var="project" items="${activeProjects}">
+    <input type="hidden" id="${project.id}" value="${project.description}"/>
+</c:forEach>
+<input type="submit" value="View Project"/>
 </form>
                     
-    <script type="text/javascript">
-        function showDetail (object) {
-            var index = object.selectedIndex;
-            document.getElementById('description').innerHTML =
-                document.getElementById(index).value;
+<script type="text/javascript">
+    function showDetail (list, textarea) {
+        var index = list.selectedIndex;
+        document.getElementById(textarea).value =
+            document.getElementById(list.options[index].value).value;
+    }
+    function getIndex (list) {
+        if (list.projectId.selectedIndex < 0) {
+            alert ('Please select a project that you are currently in');
+            return false;
         }
-        function getIndex (object) {
-            if (object.projectId.selectedIndex < 0) {
-                alert ('Please select a project that you are currently in');
-                return false;
-            }
-            return true;
-        }
-    </script>
+        return true;
+    }
+</script>
 <%--
 <c:if test="${user.role == 'None'}">
 <a href="requestAccess"><input type="submit" value="Request Acess"></a>

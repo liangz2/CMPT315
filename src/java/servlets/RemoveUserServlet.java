@@ -4,6 +4,8 @@
  */
 package servlets;
 
+import business.Project;
+import business.User;
 import database.ConnectionPool;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,8 +44,8 @@ public class RemoveUserServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         String url = "/projectDetail";
-        String query = "delete from wikirecord where useremail=? and projectid=?";
-        ResultSet resultSet = null;
+        HttpSession session = request.getSession();
+        String query = "delete from wikirecord where projectid=? and useremail=?";
         PreparedStatement statement = null;
         try {
             /*
@@ -50,32 +53,28 @@ public class RemoveUserServlet extends HttpServlet {
              */
             ConnectionPool pool = ConnectionPool.getInstance();
             connection = pool.getConnection();
-            
-            String projectID = (String) request.getAttribute("projectID");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RemoveUserServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RemoveUserServlet at " + projectID + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-            String[] emails = request.getParameterValues("removeEmail");
-            statement.setString(2, projectID);
             statement = connection.prepareStatement(query);
-
+            
+            User user = (User) session.getAttribute("user");
+            
+            Project selectedProject = user.getSelectedProject();
+            String pId = Integer.toString(selectedProject.getId());
+            String[] emails = request.getParameterValues("removeEmail");
+            
+            statement.setString(1, pId);
+            
             for (int i = 0; i < emails.length; i++) {
-                statement.setString(1, emails[i]);
+                statement.setString(2, emails[i]);
                 statement.executeUpdate();
             }
             
             statement.close();
             pool.freeConnection(connection);
             
-            request.setAttribute("projectID", projectID);
+            request.setAttribute("projectId", pId);
             RequestDispatcher dispatcher = 
                     request.getServletContext().getRequestDispatcher (url);
-            //dispatcher.forward (request, response);
+            dispatcher.forward (request, response);
         } catch (SQLException ex) {
             out.println("<html>");
             out.println("<head>");

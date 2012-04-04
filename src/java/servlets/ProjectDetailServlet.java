@@ -44,8 +44,7 @@ public class ProjectDetailServlet extends HttpServlet {
         Connection connection = null;
         ResultSet resultSet = null;
         PreparedStatement statement = null;
-        Project selectedProject = null;
-        String query = "select firstname, lastname, emailaddress"
+        String query = "select firstname, lastname, emailaddress, role"
                     + " from wikirecord inner join user on user.emailaddress="
                     + "wikirecord.useremail where projectid=?";
         try {
@@ -70,21 +69,9 @@ public class ProjectDetailServlet extends HttpServlet {
             
             ArrayList<User> users = new ArrayList<User>();
             
-            while (resultSet.next()) {
-                /*
-                for (Project project: user.getProjects().values()) {
-                    if (project.getId() == projectId) {
-                        
-                        project.setUsers(users);
-                        user.setSelectedProjectId(projectId);
-                        break;
-                    }
-                }
-                * 
-                */
+            while (resultSet.next()) 
                 users.add(new User(resultSet.getString(1), resultSet.getString(2),
-                                resultSet.getString(3),""));
-            }
+                                resultSet.getString(3), resultSet.getString(4), ""));
             
             user.setSelectedProject(projectId);
             user.getSelectedProject().setUsers(users);
