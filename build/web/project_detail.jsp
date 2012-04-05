@@ -9,7 +9,23 @@
 <jsp:include page="/includes/header.jsp"/>
 <jsp:useBean id="user" scope="session" class="business.User" />
 <h1>Project#  ${user.selectedProject.id} -  ${user.selectedProject.name}<br>
-    <font size="4">Your role in this project:  ${user.selectedProject.myRole}
+    <c:choose>
+        <c:when test="${user.selectedProject.myRole == 'N/A'}">
+            <font size="4">
+            Your are not in this project
+            </font>
+        </c:when>
+        <c:when test="${user.selectedProject.myRole == 'Pending'}">
+            <font size="4">
+            You have applied for '${user.selectedProject.pendingRole}' in the project
+            </font>
+        </c:when>
+        <c:otherwise>
+            <font size="4">
+            Your role in this project: ${user.selectedProject.myRole}
+            </font>
+        </c:otherwise>
+    </c:choose>
 </h1>
 
 <p><font size="2"><a href="index.jsp">Back to project selection page</a></font></p>
@@ -57,6 +73,9 @@
                 <p><input type="submit" value="Remove Selected Users" /></p>
             </c:if>    
             </form>
+        </c:when>
+        <c:when test="${user.selectedProject.myRole == 'N/A'}">
+            
         </c:when>
     </c:choose>
     

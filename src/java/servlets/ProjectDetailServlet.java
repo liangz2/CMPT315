@@ -7,6 +7,7 @@ package servlets;
 import business.Project;
 import business.User;
 import database.ConnectionPool;
+import database.DBUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -36,63 +37,37 @@ public class ProjectDetailServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Project newProject = null;
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String url = "/project_detail.jsp";
         ServletContext sc = request.getServletContext();
         HttpSession session = request.getSession();
-        Connection connection = null;
-        ResultSet resultSet = null;
-        PreparedStatement statement = null;
-        String query = "select firstname, lastname, emailaddress, role"
-                    + " from wikirecord inner join user on user.emailaddress="
-                    + "wikirecord.useremail where projectid=?";
-        try {
-            /*
-             * TODO output your page here. You may use following sample code.
-             */
-            ConnectionPool pool = ConnectionPool.getInstance();
-            connection = pool.getConnection();
-            // create the statement object
-            statement = connection.prepareStatement(query);
-            
-            String pId = request.getParameter("projectId");
-            if (pId == null)
-                pId = (String) request.getAttribute("projectId");
-            
-            int projectId = Integer.parseInt(pId);
-            User user = (User) session.getAttribute("user");
-            
-            statement.setString(1, pId);
-            
-            resultSet = statement.executeQuery();
-            
-            ArrayList<User> users = new ArrayList<User>();
-            
-            while (resultSet.next()) 
-                users.add(new User(resultSet.getString(1), resultSet.getString(2),
-                                resultSet.getString(3), resultSet.getString(4), ""));
-            
-            user.setSelectedProject(projectId);
-            user.getSelectedProject().setUsers(users);
-            
-            statement.close();
-            resultSet.close();
-            pool.freeConnection(connection);
-            RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
-            dispatcher.forward (request, response);
-        } catch (SQLException ex) {
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>SQLException Caught</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProjectDetailServlet at " + ex.getLocalizedMessage() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {     
-            out.close();
+
+        String pId = request.getParameter("projectId");
+        if (pId == null)
+            pId = (String) request.getAttribute("projectId");
+
+        int projectId = Integer.parseInt(pId);
+        User user = (User) session.getAttribute("user");
+
+        if (user.getProjects().get(projectId) == null) {
+            ArrayList<Project> activeProjects = (ArrayList<Project>) session.getAttribute("activeProjects");
+            for (Project activeProject: activeProjects) 
+                if (activeProject.getId() == projectId)
+                    newProject = activeProject;
+
+            // get the users of that particular project
+            newProject.setUsers(DBUtil.getProjectUsers(pId));
+            newProject.setMyRole("N/A");
+            user.setSelectedProject(newProject);
         }
+        else {
+            user.setSelectedProject(projectId);
+            user.getSelectedProject().setUsers(DBUtil.getProjectUsers(pId));
+        }
+        RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
+        dispatcher.forward (request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -16,6 +16,7 @@
 <h1>Welcome ${user.firstName}</h1>
 <font size="2"><a href="password_update.jsp">[Update Password]</a>
 <a href="info_updat.jsp">[Update Personal Info]</a></font>
+<form action="projectDetail" method="post" onsubmit="return getIndex(this)">
 <table id="activeProjects" cellspacing="2" border="0">
     <tr align="center">
         <td><h4>Currently Active Projects</h4></td>
@@ -23,7 +24,7 @@
     </tr>
     <tr align="center">
         <td>
-            <select style="width:250px; height:121px" name="activeProject" size="${activeProjects.size()}" onchange="showDetail(this, 'apDescription')">
+            <select name="projectId" style="width:250px; height:121px" name="activeProject" size="${activeProjects.size()}" onchange="showDetail(this, 'apDescription')">
                 <c:forEach var="activeProject" items="${activeProjects}">
                     <option value="${activeProject.id}">${activeProject.name}</option>
                 </c:forEach>
@@ -35,6 +36,9 @@
         </td>
     </tr>
 </table>
+<input type="submit" value="View Project"/>
+</form>
+<hr style="width:600px">
 <form action="projectDetail" method="post" onsubmit="return getIndex(this)">
 <table id="currentProjects" cellspacing="2" border="0">
     <tr align="center">

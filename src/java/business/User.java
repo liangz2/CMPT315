@@ -25,7 +25,8 @@ public class User implements Serializable {
         firstName = "";
         email = "";
         password = "";
-        projects = new HashMap<Integer, Project>();
+        if (projects == null)
+            projects = new HashMap<Integer, Project>();
     }
     
     public User (String firstName, String lastName, String email, String relativeRole, String password) {
@@ -95,4 +96,13 @@ public class User implements Serializable {
     public void setSelectedProject(int pId) {
         selectedProject = projects.get(pId);
     }
+
+    public void setSelectedProject(Project selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+
+    public void setProjects(HashMap<Integer, Project> projects) {
+        this.projects = projects;
+    }
+    
 }

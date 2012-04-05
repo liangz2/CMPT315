@@ -13,10 +13,10 @@ import java.util.ArrayList;
  */
 public class Project implements Serializable {
     private int id;
-    private int userID;
     private String name;
     private String description;
     private String myRole;
+    private String pendingRole;
     private ArrayList<User> users;
 
     public ArrayList<User> getUsers() {
@@ -30,14 +30,20 @@ public class Project implements Serializable {
     public Project () {
         name = "";
         id = -1;
-        userID = -1;
         description = "";
         myRole = "";
         users = new ArrayList<User>();
     }
+    
+    public Project (int id, String name, String description, String myRole) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.myRole = myRole;
+    }
 
-    public int getUserID() {
-        return userID;
+    public String getPendingRole() {
+        return pendingRole;
     }
 
     public String getMyRole() {
@@ -64,16 +70,16 @@ public class Project implements Serializable {
         this.myRole = mymyRole;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPendingRole(String pendingRole) {
+        this.pendingRole = pendingRole;
     }
     
     @Override

@@ -85,7 +85,7 @@ CREATE TABLE WIKIRecord (
 INSERT INTO WIKIRecord VALUES 
 ('hahaha2009@hotmail.com', '1', 'Admin'),
 ('hahaha2009@hotmail.com', '2', 'Admin'),
-('hahaha2009@hotmail.com', '3', 'Admin'),
+/*('hahaha2009@hotmail.com', '3', 'Admin'),*/
 ('ivy_onlyone@hotmail.com', '1', 'Coord'),
 ('evffegg@gmail.com', '1', 'Contri');
 
