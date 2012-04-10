@@ -13,15 +13,16 @@
 
 </font>
 <br><br><br>
-<c:if test="${user != null}">
-    <a href="logout">[Logout ${user.email}]</a>
-</c:if>
-<br><br>
-<p><small>
-    <%= currentDateFormatted %> <br>
-    Term Project for CMPT315 by Zhengyi Liang in <%= currentYear %> 
-    All rights reserved
-</small></p>
-</center>
+<div id="footer">
+    <c:if test="${user != null}">
+        <a href="logout">[Logout ${user.email}]</a>
+    </c:if>
+    <br><br>
+        <p><small>
+            <%= currentDateFormatted %> <br>
+            Term Project for CMPT315 by Zhengyi Liang in <%= currentYear %> 
+            All rights reserved
+        </small></p>
 </body>
+</div>
 </html>

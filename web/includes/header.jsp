@@ -18,16 +18,5 @@
 <html>
     <head>
         <title>WIKI Project Management</title>
-        <style type="text/css">
-            h1 {
-                text-align:center; 
-                height:100px; 
-                background-color:silver; 
-                color:azure
-            }
-        </style>    
     </head>
-
-    <body bgcolor="#CCCCCC">
-        <center>
-            <font face="Bookman Old Style, Book Antiqua, Garamond">
+    <body>

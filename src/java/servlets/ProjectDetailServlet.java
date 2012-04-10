@@ -6,11 +6,8 @@ package servlets;
 
 import business.Project;
 import business.User;
-import database.ConnectionPool;
 import database.DBUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;

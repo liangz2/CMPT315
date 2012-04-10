@@ -1,0 +1,35 @@
+/* 
+    Document   : css
+    Created on : Apr 5, 2012, 11:22:08 AM
+    Author     : Zhengyi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#background {
+    background-color: black;
+}
+
+#footer {
+    background-color: #cccccc;
+    width:80%;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 33%;
+}
+
+#header {
+    height: 5em;
+    width: 1%;
+    vertical-align: middle;
+    font-family: 'Courier New',Courier,monospace;
+    background-color: #cccccc;
+    display: table-cell;
+}
+
+#data {
+    background-color: #ffffff;
+    margin: auto;
+    width:80%;
+    display: block;
+}

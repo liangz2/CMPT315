@@ -7,26 +7,36 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <jsp:include page="/includes/header.jsp"/>
-    <h1>Welcome ${user.firstName}, update your password</h1><br>
-    <form name="passUpdate" action="password" method="post" onsubmit="return matchPassword (this)">
-        <table cellspacing="5" border="0">
-            <tr align="right">
-                <td>Current Password:</td>
-                <td><input type="password" name="oldPassword"></td>
-            </tr>
-            <tr align="right">
-                <td>New Password:</td>
-                <td><input type="password" name="newPassword"></td>
-            </tr>
-                <td>Retype New Password:</td>
-                <td><input type ="password" name="newPassword2"></td>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="Update Password"></td>
-            </tr>
-        </table>
-    </form>
-    
+<div id="background">
+    <center>
+    <div id="data">
+        <div id="header">
+            <h1>Update your password</h1><br>
+        </div>
+        <p><a href="index.jsp">[Home]</a></p>
+        <form name="passUpdate" action="password" method="post" onsubmit="return matchPassword (this)">
+            <table cellspacing="5" border="0">
+                <tr align="right">
+                    <td>Current Password:</td>
+                    <td><input type="password" name="oldPassword"></td>
+                </tr>
+                <tr align="right">
+                    <td>New Password:</td>
+                    <td><input type="password" name="newPassword"></td>
+                </tr>
+                    <td>Retype New Password:</td>
+                    <td><input type ="password" name="newPassword2"></td>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Update Password"></td>
+                </tr>
+            </table>
+        </form>
+        <jsp:include page="/includes/footer.jsp"/>
+    </div>
+</center>
+</div>
+
     <script type="text/javascript">
         function matchPassword (passwords) {
             var op = passwords.oldPassword.value;
@@ -53,4 +63,3 @@
             return true;
         }
     </script>
-<jsp:include page="/includes/footer.jsp"/>
