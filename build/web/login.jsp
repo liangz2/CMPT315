@@ -10,14 +10,10 @@
 <style type="text/css">
     <%@include file="/CSS/wiki.css" %>
 </style>
-<div id="background">
+<div class="wrapper">
     <center>
     <div id="data">
-        <div id="header">
-            <h1>
-                Welcome, Please login
-            </h1>
-        </div>
+        <div id="header"><h1>Hello</h1></div>
         <c:if test="${requestScope.error != null}">
             <font color="red">${requestScope.error}</font>
             <% request.removeAttribute("error"); %>
