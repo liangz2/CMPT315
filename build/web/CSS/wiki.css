@@ -14,35 +14,84 @@
 body {
     text-align: center;
     margin: 10px 0 0 0;
-    background-color: #26221B;
+    background-color: #231F19;
 }
 #footer {
-    background-color: #cccccc;
-    width:80%;
-    display: inline-block;
-    vertical-align: middle;
-    margin-top: 33%;
+    background: url(images/footer.png) repeat-x top;
+    text-shadow: 1px 1px #231F19;
+    color: white;
+    font-family: OCR A Extended;
+    height: 50px;
+    width:100%;
+    text-align: center;
+    padding-top: 10px;
 }
 .wrapper {
-    width: 80%;
+    width: 1024px;
     text-align: left;
     margin: 0 auto;
     background:#F4EDDF;
 }
+
 #header {
-    width: 80%;
-    padding-left: 20%;
+    width: 1000px;
+    padding-left: 24px;
     padding-top: 5px;
-    height: 70px;
+    height: 100px;
     color: white;
-    background: url(images/header.png) repeat-x;
+    background: url(images/header.png) repeat-x top;
 }
 
-h1 {
+#logo {
     background: url(images/title.png) no-repeat;
-    overflow: hidden;
-    text-indent: -100000px;
+    height: 50px;
+    width: 260px;
+    margin-top: 20px;
+    float: left;
 }
-#data {
-    
+
+#emailAddr {
+    background: url(images/emailAddr.png) no-repeat;
+    width: 100px;
+    height: 22px;
+
+}
+#password {
+    background: url(images/password.png) no-repeat;
+    width: 64px;
+    height: 22px;
+}
+
+#loginButton {
+    width: 48px;
+    height: 24px;
+    font-size: 0;
+    border: none;
+    float: left;
+    margin-left: 20px;
+    background: url(images/loginButton.png) top;
+}
+
+#loginButton:hover{
+    background-position-y: 24px;
+    cursor: pointer;
+}
+
+#registerButton {
+    display: block;
+    width: 70px;
+    height: 24px;
+    font-size: 0;
+    border: none;
+    float: left;
+    margin-left: 20px;
+    background: url(images/registerButton.png) top;
+}
+
+#registerButton:hover {
+    background-position-y: 24px;
+}
+
+#register {
+    float: right;
 }

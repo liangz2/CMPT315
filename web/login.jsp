@@ -11,37 +11,36 @@
     <%@include file="/CSS/wiki.css" %>
 </style>
 <div class="wrapper">
-    <center>
-    <div id="data">
-        <div id="header"><h1>Hello</h1></div>
-        <c:if test="${requestScope.error != null}">
-            <font color="red">${requestScope.error}</font>
-            <% request.removeAttribute("error"); %>
-        </c:if>
-        <c:if test="${requestScope.registered != null}">
-            <font color="green">${requestScope.registered}</font>
-            <% request.removeAttribute("registered"); %>
-        </c:if>
-            <form action="login" method="post">
-                <table cellspacing="5" border="0">
-                    <tr>
-                        <td align="right">Email address:</td>
-                        <td><input style="width:180px" type="text" name="emailAddress"></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Password:</td>
-                        <td><input style="width:180px" type="password" name="password"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input style="width:77px" type="submit" value="Login">
-                            <a href="register.jsp"><input style="width:77px" type="button" value="Register"></a>
-                        </td>
-                    </tr> 
-                </table>
-            </form>
-    </div>
-        <jsp:include page="/includes/footer.jsp"/>
-    </center>
+    <div id="header"><div id="logo"></div>
+    <c:if test="${requestScope.error != null}">
+        <font color="red">${requestScope.error}</font>
+        <% request.removeAttribute("error"); %>
+    </c:if>
+    <c:if test="${requestScope.registered != null}">
+        <font color="green">${requestScope.registered}</font>
+        <% request.removeAttribute("registered"); %>
+    </c:if>
+        <form action="login" method="post">
+            <div id="register">
+            <table cellspacing="5" border="0">
+                <tr>
+                    <td align="right"><div id="emailAddr"></div></td>
+                    <td><input style="width:180px" type="text" name="emailAddress"></td>
+                </tr>
+                <tr>
+                    <td align="right"><div id="password"></div></td>
+                    <td><input style="width:180px" type="password" name="password"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td align="right">
+                        <input id="loginButton" type="submit" value="Login">
+                        <a href="register.jsp" id="registerButton"></a>
+                    </td>
+                </tr> 
+            </table>
+            </div>
+            </div>
+        </form>
+    <jsp:include page="/includes/footer.jsp"/>
 </div>

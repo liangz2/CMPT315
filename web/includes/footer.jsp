@@ -14,15 +14,11 @@
 </font>
 <br><br><br>
 <div id="footer">
-    <c:if test="${user != null}">
-        <a href="logout">[Logout ${user.email}]</a>
-    </c:if>
-    <br><br>
-        <p><small>
-            <%= currentDateFormatted %> <br>
-            Term Project for CMPT315 by Zhengyi Liang in <%= currentYear %> 
-            All rights reserved
-        </small></p>
-</body>
+    <small>
+        <%= currentDateFormatted %> <br>
+        Term Project for CMPT315 by Zhengyi Liang in <%= currentYear %> 
+        All rights reserved
+    </small>
 </div>
+</body>
 </html>
