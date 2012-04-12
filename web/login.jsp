@@ -40,7 +40,10 @@
                 </tr> 
             </table>
             </div>
-            </div>
         </form>
+    </div>
+    <div id="nav">
+        
+    </div>
     <jsp:include page="/includes/footer.jsp"/>
 </div>
