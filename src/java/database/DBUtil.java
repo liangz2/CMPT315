@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,10 +25,11 @@ public class DBUtil {
         PreparedStatement ps = null;
         Project project = null;
         ResultSet resultSet = null;
+        Connection connection = null;
         String query = "SELECT * FROM Project "
                     + "WHERE ProjectID = ?";
         try {
-            Connection connection = pool.getConnection ();
+            connection = pool.getConnection ();
             ps = connection.prepareStatement (query);
             ps.setString(1, Integer.toString(pId));
             resultSet = ps.executeQuery();
@@ -45,19 +47,23 @@ public class DBUtil {
             
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+        } finally {
+            // free up resources
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            return project;
         }
-        return project;
     }
     
     public static User getUser (String email) {
         User user = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
+        Connection connection = null;
         String query = "SELECT * FROM User "
                     + "WHERE emailaddress = ?";
         try {
-            Connection connection = pool.getConnection();
+            connection = pool.getConnection();
             ps = connection.prepareStatement(query);
             ps.setString(1, email);
             
@@ -74,19 +80,86 @@ public class DBUtil {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+        } finally {
+            // free up resources
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            return user;
         }
-        return user;
     }
     
+    /**
+     * create a user in the DB
+     * @param user 
+     */
+    public static void createUser (User user) {
+        PreparedStatement ps = null;
+        String query = "insert into user values (?,?,?,?,true)";
+        Connection connection = null;
+        try {
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(query);
+            // pull out the info to complete the query
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            // add the user into the DB
+            ps.executeUpdate();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            // free up resources
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+        }
+    }
+    /**
+     * get all the active projects just the descriptions and the ids 
+     * @return 
+     */
     public static HashMap getActiveProjects () {
-        
-        return null;
+        ResultSet resultSet = null;
+        Statement statement = null;
+        Connection connection = null;
+        HashMap<Integer, Project> activeProjects = null;
+        String query = "SELECT ProjectID, ProjectName, ProjectDescription"
+                + " FROM Project WHERE ProjectIsActive=true";
+        try {
+            connection = pool.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            if (activeProjects == null)
+                activeProjects = new HashMap<Integer, Project>();
+
+            while (resultSet.next()) {
+                Project project = new Project();
+                int id = Integer.parseInt(resultSet.getString(1));
+                project.setId(id);
+                project.setName(resultSet.getString(2));
+                project.setDescription(resultSet.getString(3));
+                activeProjects.put(id, project);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            pool.freeConnection(connection);
+            DBUtil.closeStatement(statement);
+            DBUtil.closeResultSet(resultSet);
+            return activeProjects;
+        }
     }
-    
+    /**
+     * get the projects that the user is currently in
+     * @param email
+     * @return 
+     */
     public static HashMap getUserProjects (String email) {
         ResultSet resultSet = null;
         PreparedStatement ps = null;
+        Connection connection = null;
         HashMap<Integer, Project> userProjects = null;
         String query = "select project.projectid, "
                     + "projectname, projectdescription, role from project "
@@ -94,7 +167,7 @@ public class DBUtil {
                     + "where useremail=? and projectisactive=true";
         
         try {
-            Connection connection = pool.getConnection();
+            connection = pool.getConnection();
             ps = connection.prepareStatement(query);
             ps.setString(1, email);
             resultSet = ps.executeQuery();
@@ -108,27 +181,33 @@ public class DBUtil {
                         resultSet.getString(4));
                 // add projects to the user for future usage
                 userProjects.put(p.getId(), p);
-            }
-            resultSet.close();
-            ps.close();
-            pool.freeConnection(connection);
-            
+            }            
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+        } finally {
+            // free up resources
+            DBUtil.closeResultSet(resultSet);
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            return userProjects;
         }
-        return userProjects;
     }
     
+    /**
+     * obtain all users that registered under a project
+     * @param pId
+     * @return 
+     */
     public static ArrayList<User> getProjectUsers (String pId) {        
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         ArrayList<User> users = null;
+        Connection connection = null;
         String query = "select firstname, lastname, emailaddress, role"
                     + " from wikirecord inner join user on user.emailaddress="
                     + "wikirecord.useremail where projectid=?";
         try {
-            Connection connection = pool.getConnection();
+            connection = pool.getConnection();
             ps = connection.prepareStatement(query);
             ps.setString(1, pId);
             resultSet = ps.executeQuery();
@@ -139,15 +218,70 @@ public class DBUtil {
             while (resultSet.next()) 
                 users.add(new User(resultSet.getString(1), resultSet.getString(2),
                                 resultSet.getString(3), resultSet.getString(4), ""));
-            
-            resultSet.close();
-            ps.close();
-            pool.freeConnection(connection);
-            
+                        
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+        } finally {
+            // free up resources
+            DBUtil.closeResultSet(resultSet);
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            return users;
         }
-        return users;
+    }
+    
+    /**
+     * create a project into the DB
+     * @param p 
+     */
+    public static void createProject (Project p) {
+        PreparedStatement ps = null;
+        Connection connection = null;
+        String query = "INSERT INTO Project Values (?,?,?,true)";
+        
+        try {
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString (1, p.getName());
+            ps.setString (2, p.getDescription());
+            ps.setString(3, p.getDescription());
+            
+        } catch (SQLException ex) {
+            
+        }
+    }
+    
+    /**
+     * close a preparedstatement
+     * @param ps 
+     */
+    public static void closePreparedStatement (PreparedStatement ps) {
+        try {
+            ps.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    /**
+     * close a statement
+     * @param statement 
+     */
+    public static void closeStatement (Statement statement) {
+        try {
+            statement.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    /**
+     * close a resultset
+     * @param rs 
+     */
+    public static void closeResultSet (ResultSet rs) {
+        try {
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }

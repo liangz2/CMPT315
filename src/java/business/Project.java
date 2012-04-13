@@ -5,6 +5,7 @@
 package business;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,7 @@ public class Project implements Serializable {
     private String description;
     private String myRole;
     private String pendingRole;
+    private Timestamp creationTime;
     private ArrayList<User> users;
 
     public ArrayList<User> getUsers() {

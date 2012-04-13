@@ -28,6 +28,10 @@
         <servlet-name>RemoveUserServlet</servlet-name>
         <servlet-class>servlets.RemoveUserServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ActiveProjectServlet</servlet-name>
+        <servlet-class>servlets.ActiveProjectServelt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProjectNameServlet</servlet-name>
         <url-pattern>/displayProjects</url-pattern>
@@ -52,6 +56,10 @@
         <servlet-name>RemoveUserServlet</servlet-name>
         <url-pattern>/removeUser</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ActiveProjectServlet</servlet-name>
+        <url-pattern>/activeProjects</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -59,7 +67,7 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>
-            login.jsp
+            activeProjects
         </welcome-file>
     </welcome-file-list>
 </web-app>

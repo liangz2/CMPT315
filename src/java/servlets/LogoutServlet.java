@@ -35,16 +35,14 @@ public class LogoutServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        String url = "/login.jsp";
+        String url = "/activeProjects";
         
         User user = (User) session.getAttribute("user");
         if (user == null)
             request.setAttribute("error", "You are not logged in");
         else {
             session.removeAttribute("user");
-            session.removeAttribute("activeProjects");
             session.removeAttribute("error");
-            url = "/logged_out.jsp";
         }
         RequestDispatcher dispatcher = 
                 getServletContext().getRequestDispatcher(url);

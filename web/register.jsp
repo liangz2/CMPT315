@@ -5,12 +5,10 @@
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="includes/login_header.html"/>
+<jsp:include page="includes/header.jsp"/>
 <style type="text/css">
     <%@include file="/CSS/wiki.css" %>
 </style>
-<div class="wrapper">
-    <div id="data">
         <h1>New User Register</h1><br>
         <c:if test="${requestScope.error != null}">
             <font color="red">${requestScope.error}</font><br>
@@ -42,7 +40,6 @@
         </form>
         <p><a href="login.jsp">[Back to login screen]</a></p>
         <jsp:include page="includes/footer.jsp"/>
-    </div>
 </div>
 <script type="text/javascript">
     function checkFields (data) {

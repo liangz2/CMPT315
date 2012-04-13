@@ -5,6 +5,7 @@
 package business;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 /**
@@ -16,6 +17,7 @@ public class User implements Serializable {
     private String firstName;
     private String email;
     private String password;
+    private Timestamp creationTime;
     private Project selectedProject;
     private HashMap<Integer, Project> projects;
     private String relativeRole;
@@ -29,12 +31,31 @@ public class User implements Serializable {
             projects = new HashMap<Integer, Project>();
     }
     
+    public User (String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+    
+    public User (String firstName, String lastName, String email, String password, Timestamp creationTime) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.creationTime = creationTime;
+    }
+    
     public User (String firstName, String lastName, String email, String relativeRole, String password) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.relativeRole = relativeRole;
         this.password = "";
+    }
+
+    public Timestamp getCreationTime() {
+        return creationTime;
     }
 
     public String getRelativeRole() {
@@ -83,6 +104,10 @@ public class User implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setCreationTime(Timestamp creationTime) {
+        this.creationTime = creationTime;
     }
 
     public void setPassword(String password) {

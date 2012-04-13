@@ -20,16 +20,17 @@ use WIKI;
 CREATE TABLE Project (
 	ProjectID INT NOT NULL AUTO_INCREMENT,
 	ProjectName VARCHAR (40) NOT NULL,
-	ProjectIsActive BOOLEAN NOT NULL,
 	ProjectDescription VARCHAR (150) NOT NULL,
+	ProjectCreationTime TIMESTAMP NOT NULL,
+	ProjectIsActive BOOLEAN NOT NULL,
 	
 	PRIMARY KEY (ProjectID)
 );
 
 INSERT INTO Project VALUES
-('1', 'test1', true, 'test testtest testtest testtest test'),
-('2', 'test2', true, 'test testtest testtest testtest'),
-('3', 'test3', true, 'test testtest testtest testtest testtest test');
+('1', 'test1', 'test testtest testtest testtest test', NOW(), true),
+('2', 'test2', 'test testtest testtest testtest', NOW(), true),
+('3', 'test3', 'test testtest testtest testtest testtest test', NOW(), true);
 
 /*****************************************************************
 * Record table that keeps track of user with projects. This table
@@ -42,15 +43,16 @@ CREATE TABLE User (
 	LastName VARCHAR (20) NOT NULL,
 	EmailAddress VARCHAR (50) NOT NULL,
 	Password VARCHAR (15) NOT NULL,
+	UserCreationTime TIMESTAMP NOT NULL,
 	UserIsActive BOOLEAN NOT NULL,
 	
 	PRIMARY KEY (EmailAddress)
 );
 
 INSERT INTO User VALUES 
-('Zhengyi', 'Liang', 'hahaha2009@hotmail.com', '04221988', true),
-('Jiada', 'Lee', 'evffegg@gmail.com', '524411', true),
-('Jingbin', 'Zhang', 'ivy_onlyone@hotmail.com', 'iloveu4ever', true);
+('Zhengyi', 'Liang', 'hahaha2009@hotmail.com', '04221988', NOW(), true),
+('Jiada', 'Lee', 'evffegg@gmail.com', '524411', NOW(), true),
+('Jingbin', 'Zhang', 'ivy_onlyone@hotmail.com', 'iloveu4ever', NOW(), true);
 
 CREATE TABLE Role (
 	RoleID INT NOT NULL,

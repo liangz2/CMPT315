@@ -6,62 +6,88 @@
         Purpose of the stylesheet follows.
 */
 
-#background {
-    position: absolute;
-    left: 0%;
-    background-color: black;
-}
 body {
     text-align: center;
     margin: 10px 0 0 0;
     background-color: #231F19;
+    font-family: OCR A Extended;
+    color: white;
 }
+
+#options {
+    font-size: 12px;
+    float:right;
+    margin-right: 20px;
+    list-style: none;
+    text-align: right;
+}
+#options a:link, a:visited {
+    color:white;
+    text-decoration: none;
+}
+#options a:hover {
+    text-shadow: 2px 2px 5px black;
+}
+#options li {
+    padding-bottom: 10px;
+}
+
 #footer {
     background: url(images/footer.png) repeat-x top;
-    text-shadow: 1px 1px #231F19;
-    color: white;
-    font-family: OCR A Extended;
     height: 50px;
     width:100%;
     text-align: center;
     padding-top: 10px;
+    text-shadow: 2px 2px 5px #231F19;
 }
-.wrapper {
+/*===========================================*/
+#wrapper {
     width: 1024px;
     text-align: left;
     margin: 0 auto;
-    background:#F4EDDF;
+    background: black;
 }
 
+/*===========================================*/
 #header {
     width: 1000px;
     padding-left: 24px;
     padding-top: 5px;
     height: 100px;
-    color: white;
+    border-bottom: 2px black;
     background: url(images/header.png) repeat-x top;
 }
 
+/*===========================================*/
 #logo {
     background: url(images/title.png) no-repeat;
     height: 50px;
-    width: 260px;
+    width: 308px;
     margin-top: 20px;
     float: left;
 }
 
+/*===========================================*/
+#login {
+    float: right;
+}
+
+/*===========================================*/
 #emailAddr {
     background: url(images/emailAddr.png) no-repeat;
     width: 100px;
     height: 22px;
 
 }
+
+/*===========================================*/
 #password {
     background: url(images/password.png) no-repeat;
     width: 64px;
     height: 22px;
 }
 
+/*===========================================*/
 #loginButton {
     width: 48px;
     height: 24px;
@@ -71,12 +97,12 @@ body {
     margin-left: 20px;
     background: url(images/loginButton.png) top;
 }
-
 #loginButton:hover{
     background-position-y: 24px;
     cursor: pointer;
 }
 
+/*===========================================*/
 #registerButton {
     display: block;
     width: 70px;
@@ -87,11 +113,80 @@ body {
     margin-left: 20px;
     background: url(images/registerButton.png) top;
 }
-
 #registerButton:hover {
     background-position-y: 24px;
 }
 
-#register {
-    float: right;
+/*===========================================*/
+#nav {
+    background: url(images/navBg.png) repeat-x top;
+    height:30px;
+    list-style: none;
+    margin:0 auto;
+}
+#nav li {
+    float: left;
+    margin-right: 10px;
+    padding: 5px 0 0 15px;
+}
+#nav a {
+    float: left;
+}
+/*===========================================*/
+#homeButton {
+    background: url(images/homeButton.png) top; 
+    height: 24px; 
+    width: 42px; 
+    font-size: 0
+}
+#homeButton:hover, :active {
+    background-position-y: 24px;
+}
+
+
+/*===========================================*/
+#projectButton {
+    background: url(images/projectButton.png) top;
+    height: 24px;
+    width: 63px;
+    font-size: 0;
+}
+
+#projectButton:hover {
+    background-position-y: 24px;
+}
+
+/*===========================================*/
+#requestButton {
+    background: url(images/requestButton.png) top;
+    height: 24px;
+    width: 70px;
+    font-size: 0;
+}
+#requestButton:hover {
+    background-position-y: 24px;
+}
+
+/*===========================================*/
+#uploadButton {
+    background: url(images/uploadButton.png) top;
+    height: 24px;
+    width: 56px;
+    font-size: 0;
+}
+#uploadButton:hover {
+    background-position-y: 24px;
+}
+
+/*===========================================*/
+#projectList {
+    list-style: none;
+    font-size: 15px;
+}
+#projectList a {
+    text-decoration: none;
+    color: white;
+}
+#projectList a:hover {
+    text-shadow: 2px 2px 2px azure;
 }

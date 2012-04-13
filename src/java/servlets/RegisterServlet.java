@@ -4,10 +4,13 @@
  */
 package servlets;
 
-import database.ConnectionPool;
+import business.User;
+import database.DBUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -35,57 +38,42 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String sqlStatement = "";
         String url = "";
         ServletContext sc = getServletContext();
-        Statement statement = null;
-        Connection connection = null;
+
         // obtain user info
         String firstName = (String) request.getParameter ("firstName");
         String lastName = (String) request.getParameter ("lastName");
         String emailAddress = (String) request.getParameter ("emailAddress");
         String password = (String) request.getParameter ("p1");
-        try {
-            // connect to data base
-            ConnectionPool pool = ConnectionPool.getInstance();
-            connection = pool.getConnection();
-            
-            // create the statement object
-            statement = connection.createStatement ();
-            
-/*            
-            resultSet = statement.executeQuery("select userid from user where "
-                    + "emailAddress='" + emailAddress + "'");
-            
-            // check user exsistency
-            userExists = resultSet.next() ? true : false;
- 
- * 
- */
-            sqlStatement = "insert into user values "
-                    + "('" + firstName + "', " + "'" + lastName + "', "
-                    + "'" + emailAddress + "', " + "'" + password + "')";
-
-            statement.executeUpdate(sqlStatement);
+        // check if user exists
+        User user = DBUtil.getUser(emailAddress);
+        if (user == null) {
+            user = new User(firstName, lastName, emailAddress, password);
+            DBUtil.createUser(user);
             url = "/login.jsp";
             request.setAttribute("registered", "Thank you for joining us, please login now");
-            
-            statement.close();            
-            connection.close();
-            
-        } catch (SQLException ex) {
+        } else {
             url = "/register.jsp";
             request.removeAttribute("password");
             request.setAttribute("error", "This email is already registered");
             request.setAttribute("firstName", firstName);
             request.setAttribute("lastName", lastName);
             request.setAttribute("emailAddress", emailAddress);
-        } finally {
-            RequestDispatcher dispatcher = sc.getRequestDispatcher(url);
-                    dispatcher.forward(request, response);
-            out.close();        
         }
+
+        RequestDispatcher dispatcher = sc.getRequestDispatcher(url);
+                dispatcher.forward(request, response);
+        out.close();       
     }
+    
+    private Timestamp getTime () {
+        Calendar calendar = Calendar.getInstance();
+        // get the date
+        Date time = calendar.getTime();
+        // return the timesamp with nano second set to be 0
+        return new Timestamp (time.getTime());
+}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
