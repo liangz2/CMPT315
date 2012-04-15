@@ -9,9 +9,17 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
     User user = (User) request.getSession().getAttribute("user");
-    HashMap<Integer, Project> activeProjects = 
-            (HashMap<Integer, Project>)request.getSession().getAttribute("activeProjects");
-    Integer[] ids = activeProjects.keySet().toArray(new Integer[0]);
+    String requestedPage = (String) request.getAttribute("requestedPage");
+    if (requestedPage == null)
+        requestedPage = request.getParameter("requestedPage");
+    String projects = "/projects.jsp";
+    String createProject = "create_project.jsp";
+    
+    if (user == null && requestedPage.equals(createProject)) {
+        requestedPage = projects;
+        request.setAttribute("notLogin", "You must login to create your project, or "
+                + "<a href='main.jsp?requestedPage=register.jsp'>register</a>");
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -22,7 +30,6 @@
     <style type="text/css">
         <%@include file="/CSS/wiki.css" %>
     </style>
-
     <div id="wrapper">
         <div id="header"><div id="logo"></div>
             <c:choose>
@@ -42,7 +49,7 @@
                             <td></td>
                             <td align="right">
                                 <input id="loginButton" type="submit" value="Login">
-                                <a href="register.jsp" id="registerButton"></a>
+                                <a href="main.jsp?requestedPage=register.jsp" id="registerButton"></a>
                             </td>
                         </tr> 
                     </table>
@@ -58,25 +65,42 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <!-- end of header part -->
         
-        <!-- content part -->
         <ul id="nav">
-            <li><a href="activeProjects" id="homeButton">H</a></li>
-            <li><a href="#" id="projectButton">P</a></li>
+            <li><a href="<%= response.encodeURL("activeProjects") %>" id="homeButton"
+                   <c:if test="<%= requestedPage.equals(projects) %>">
+                       class="selected"
+                   </c:if>>H</a></li>
+            <li><a href="<%= response.encodeURL("main.jsp?requestedPage=create_project.jsp") %>"
+                   id="projectButton"
+                   <c:if test="<%= requestedPage.equals(createProject) %>">
+                       class="selected"
+                   </c:if>>P</a></li>
             <li><a href="#" id="requestButton">R</a></li>
             <li><a href="#" id="uploadButton">U</a></li>
         </ul>
-        <ul id="projectList">
-            <%for (int i = 0; i < ids.length; i++) {%>
-            <li>
-                <a href="<%=response.encodeURL("projectDetail?projectId=" + ids[i]) %>">
-                    <%=activeProjects.get(ids[i]).getName()%>
-                </a>
-            </li>
-            <%}%>
-        </ul>
-        
+        <div class="clear"></div>
+
+        <!-- end of header part -->
+
+        <!-- content part -->
+        <div id="warning">
+            <c:if test="${notLogin != null}">
+                <p><font color="red">${notLogin}</font></p>
+            </c:if>
+        </div>
+        <div id="leftContent">
+            <jsp:include page="<%= requestedPage %>" />
+            <div id="search">
+            </div>
+        </div>
+        <div class="clear"></div>
+
+        <div id="rightContent">
+            
+        </div>
+        <div class="clear"></div>
+
         <!-- end of content part -->
         
         <!-- footer part -->
@@ -94,6 +118,7 @@
             Term Project for CMPT315 by Zhengyi Liang in <%= currentYear %> 
             All rights reserved
         </div>
+        <div class="clear"></div>
     </div>
     </body>
 </html>

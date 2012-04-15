@@ -5,7 +5,7 @@
 package business;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -18,23 +18,17 @@ public class Project implements Serializable {
     private String description;
     private String myRole;
     private String pendingRole;
-    private Timestamp creationTime;
+    private Date creationTime;
     private ArrayList<User> users;
 
     public ArrayList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-    
     public Project () {
         name = "";
-        id = -1;
         description = "";
         myRole = "";
-        users = new ArrayList<User>();
     }
     
     public Project (int id, String name, String description, String myRole) {
@@ -42,6 +36,21 @@ public class Project implements Serializable {
         this.name = name;
         this.description = description;
         this.myRole = myRole;
+    }
+    /**
+     * returns creation time up to date only
+     * @return 
+     */
+    public String getCreationDate() {
+        return creationTime.toString();
+    }
+    
+    /**
+     * return creation time up to seconds
+     * @return 
+     */
+    public Date getCreationTime() {
+        return creationTime;
     }
 
     public String getPendingRole() {
@@ -64,6 +73,10 @@ public class Project implements Serializable {
         return name;
     }
 
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -80,6 +93,10 @@ public class Project implements Serializable {
         this.name = name;
     }
 
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+    
     public void setPendingRole(String pendingRole) {
         this.pendingRole = pendingRole;
     }

@@ -1,0 +1,93 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>CSS Tabbed Navigation</title>
+	<meta http-equiv="content-type"	content="text/html;	charset=iso-8859-1"	/>
+	<meta name="author"	content="Ian Andolina" />
+	<meta name="robots"	content="all" />
+	<meta name="MSSmartTagsPreventParsing" content="true" />
+	<meta name="description" content="CSS techniques demonstrating pure CSS navigation tabs / tabbed menus"	/>
+	<meta name="keywords" content="CSS cascading style sheet sheets boxes positioned CSS boxes tabbed menu tab tabbed navigation in-line list active hover floating fixed relative positioning" />
+	<style type="text/css">
+	body {
+		margin: 20px;
+		padding: 0px;
+		background: #CACCB4;
+		font: 16px arial, sans-serif; }
+
+	pre {text-indent: 30px}
+
+	#tabmenu {
+		color: #000;
+		border-bottom: 2px solid black;
+		margin: 12px 0px 0px 0px;
+		padding: 0px;
+		z-index: 1;
+		padding-left: 10px }
+
+	#tabmenu li {
+		display: inline;
+		overflow: hidden;
+		list-style-type: none; }
+
+	#tabmenu a, a.active {
+		color: #DEDECF;
+		background: #898B5E;
+		font: bold 1em "Trebuchet MS", Arial, sans-serif;
+		border: 2px solid black;
+		padding: 2px 5px 0px 5px;
+		margin: 0;
+		text-decoration: none; }
+
+	#tabmenu a.active {
+		background: #ABAD85;
+		border-bottom: 3px solid #ABAD85; }
+
+	#tabmenu a:hover {
+		color: #fff;
+		background: #ADC09F; }
+
+	#tabmenu a:visited {
+		color: #E8E9BE; }
+
+	#tabmenu a.active:hover {
+		background: #ABAD85;
+		color: #DEDECF; }
+
+	#content {font: 0.9em/1.3em "bitstream vera sans", verdana, sans-serif;
+		text-align: justify;
+		background: #ABAD85;
+		padding: 20px;
+		border: 2px solid black;
+		border-top: none;
+		z-index: 2;	}
+
+	#content a {
+		text-decoration: none;
+		color: #E8E9BE; }
+
+	#content a:hover { background: #898B5E; }
+	</style>
+</head>
+
+<body>
+
+<ul id="tabmenu">
+	<li><a class="active" href="tab1.html">Enormous</a></li>
+	<li><a href="tab2.html">Flared</a></li>
+	<li><a href="tab3.html">Nostrils</a></li>
+</ul>
+
+<div id="content">
+
+<p>This page demonstrates a pure CSS method to generate a 'Tab' style interface (see <a href="http://www.web-graphics.com/mtarchive/000852.php">here</a> for more). It first uses the trick of an <a href="http://www.alistapart.com/stories/practicalcss/">inline list</a> to generate the tabs. To get the tabs to really look the part - the 'active' tab needs to blend into the 'content' area. This is achieved by giving the active tab a different class, and changing its properties (border-bottom and background) accordingly. Additionally, it allows one to change the active tab's :hover by not highlighting the active tab in the same way as the inactive tabs. </p>
+<p>Because the purpose of the tab interface is to 'guide' the user as to their present location, these small features do actually improve the 'usability' of the tab structure. Try clicking on each tab to see it in action...</p>
+<p>The code is very simple, the CSS is embedded to let you see 'under the hood'. Most of the action occurs in the list styling.  If the tabs don't 'align' properly to the top of the box, alter the font-size and line-height of the li element to suit. Changing font will require finding the 'sweet' spot at which different browsers render identically.</p>
+<p>Note that for IE5/5.5 you probably need to add hacks to the CSS to overcome their bugs, I would have done it but I'm tired of box-model hacks...</p>
+<p>I have also made a second version, but with the tabs part of an overlying banner, and fixed so that the tabs always stay visible. <a href="tabinvert1.html">Find it here...</a></p>
+<p>Valid <a href="http://validator.w3.org/check/referer">XHTML V1.0 strict</a> and <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS V2.0</a> | <a href="http://nontroppo.org/test/">Go back to CSS page</a> | <a href="http://nontroppo.org">Go home (including an email link)</a> | This page is CopyLeft, you are free to use the code!</p>
+</div>
+
+</body>
+</html>

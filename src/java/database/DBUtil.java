@@ -6,11 +6,7 @@ package database;
 
 import business.Project;
 import business.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,8 +56,9 @@ public class DBUtil {
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         Connection connection = null;
-        String query = "SELECT * FROM User "
-                    + "WHERE emailaddress = ?";
+        String query = "SELECT FisrtName, LastName, EmailAddress, Password "
+                + "UserIsActive, UserCreationTime + 0 FROM User "
+                + "WHERE emailaddress = ?";
         try {
             connection = pool.getConnection();
             ps = connection.prepareStatement(query);
@@ -77,6 +74,10 @@ public class DBUtil {
                 user.setLastName (resultSet.getString (2));
                 user.setEmail (resultSet.getString (3));
                 user.setPassword (resultSet.getString (4));
+                user.setIsActive(resultSet.getString(5).equals("1"));
+                Timestamp creationDate = 
+                        new Timestamp(Long.parseLong(resultSet.getString(6)));
+                user.setCreationTime(creationDate);
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -94,7 +95,7 @@ public class DBUtil {
      */
     public static void createUser (User user) {
         PreparedStatement ps = null;
-        String query = "insert into user values (?,?,?,?,true)";
+        String query = "insert into user values (?,?,?,?,NOW(),true)";
         Connection connection = null;
         try {
             connection = pool.getConnection();
@@ -124,7 +125,8 @@ public class DBUtil {
         Statement statement = null;
         Connection connection = null;
         HashMap<Integer, Project> activeProjects = null;
-        String query = "SELECT ProjectID, ProjectName, ProjectDescription"
+        String query = "SELECT ProjectID, ProjectName, ProjectDescription, "
+                + "ProjectCreationTime"
                 + " FROM Project WHERE ProjectIsActive=true";
         try {
             connection = pool.getConnection();
@@ -140,6 +142,7 @@ public class DBUtil {
                 project.setId(id);
                 project.setName(resultSet.getString(2));
                 project.setDescription(resultSet.getString(3));
+                project.setCreationTime(resultSet.getDate(4));
                 activeProjects.put(id, project);
             }
         } catch (SQLException ex) {
@@ -164,7 +167,7 @@ public class DBUtil {
         String query = "select project.projectid, "
                     + "projectname, projectdescription, role from project "
                     + "inner join wikirecord on project.projectid=wikirecord.projectid "
-                    + "where useremail=? and projectisactive=true";
+                    + "where EmailAddress=? and projectisactive=true";
         
         try {
             connection = pool.getConnection();
@@ -194,7 +197,7 @@ public class DBUtil {
     }
     
     /**
-     * obtain all users that registered under a project
+     * obtain all users that registered under a project by project id
      * @param pId
      * @return 
      */
@@ -205,7 +208,7 @@ public class DBUtil {
         Connection connection = null;
         String query = "select firstname, lastname, emailaddress, role"
                     + " from wikirecord inner join user on user.emailaddress="
-                    + "wikirecord.useremail where projectid=?";
+                    + "wikirecord.EmailAddress where projectid=?";
         try {
             connection = pool.getConnection();
             ps = connection.prepareStatement(query);
@@ -234,20 +237,28 @@ public class DBUtil {
      * create a project into the DB
      * @param p 
      */
-    public static void createProject (Project p) {
+    public static boolean createProject (Project p, String email) {
         PreparedStatement ps = null;
         Connection connection = null;
-        String query = "INSERT INTO Project Values (?,?,?,true)";
-        
+        String query = "INSERT INTO Project "
+                + "(Projectname, ProjectDescription, ProjectCreator, ProjectCreationTime, ProjectIsActive)"
+                + " Values (?,?,?,NOW(),true)";
+        boolean success = false;
         try {
             connection = pool.getConnection();
             ps = connection.prepareStatement(query);
             ps.setString (1, p.getName());
             ps.setString (2, p.getDescription());
-            ps.setString(3, p.getDescription());
+            ps.setString(3, email);
             
+            ps.executeUpdate();
+            success = true;
         } catch (SQLException ex) {
-            
+            ex.printStackTrace();
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            return success;
         }
     }
     

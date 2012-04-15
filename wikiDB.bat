@@ -9,7 +9,7 @@
 c:
 cd \Program Files\MySQL\MySQL Server 5.5\bin\
 
-mysql -uroot -psesame < D:\Course\CMPT315\WebApps\WIKI_Project\wikiDB.sql
+mysql -uroot -psesame < %~dp0\wikiDB.sql
 
 ECHO.
 ECHO If no error message is shown, the databases named murach and music were created successfully.

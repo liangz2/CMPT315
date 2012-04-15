@@ -18,6 +18,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     private Timestamp creationTime;
+    private boolean isActive;
     private Project selectedProject;
     private HashMap<Integer, Project> projects;
     private String relativeRole;
@@ -52,6 +53,10 @@ public class User implements Serializable {
         this.email = email;
         this.relativeRole = relativeRole;
         this.password = "";
+    }
+
+    public boolean isIsActive() {
+        return isActive;
     }
 
     public Timestamp getCreationTime() {
@@ -92,6 +97,10 @@ public class User implements Serializable {
     
     public void removeProject (int projectId) {
         projects.remove(projectId);
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
    
     public void setEmail(String email) {

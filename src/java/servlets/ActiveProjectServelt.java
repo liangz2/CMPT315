@@ -35,10 +35,14 @@ public class ActiveProjectServelt extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = "/main.jsp";
+        String requestedPage = "/projects.jsp";
+        
         HttpSession session = request.getSession();
         // obtain currently active projects
         HashMap<Integer, Project> activeProjects = DBUtil.getActiveProjects();
+        
         session.setAttribute("activeProjects", activeProjects);
+        request.setAttribute("requestedPage", requestedPage);
         // forward to index page
         RequestDispatcher dispatcher =
                 getServletContext().getRequestDispatcher(url);

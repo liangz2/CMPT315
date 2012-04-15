@@ -63,13 +63,14 @@ public class LoginServlet extends HttpServlet {
             if (resultSet.next ()) {
                 // obtain user data
                 User user = new User();
-                url = "/displayProjects";
+                url = "/main.jsp";
                 user.setFirstName (resultSet.getString (1));
                 user.setLastName (resultSet.getString (2));
                 user.setEmail (resultSet.getString (3));
                 user.setPassword (resultSet.getString (4));
                 
-                request.setAttribute ("user", user);
+                request.getSession().setAttribute ("user", user);
+                request.setAttribute("requestedPage", "/projects.jsp");
             }
             else {
                 url = "/login.jsp";

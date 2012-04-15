@@ -4,42 +4,40 @@
     Author     : Zhengyi
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="includes/header.jsp"/>
-<style type="text/css">
-    <%@include file="/CSS/wiki.css" %>
-</style>
-        <h1>New User Register</h1><br>
-        <c:if test="${requestScope.error != null}">
-            <font color="red">${requestScope.error}</font><br>
-        </c:if>
-        <form name="data" action="register" method="post" onsubmit="return checkFields (this)">
-            <table align="center" cellspacing="5" border="0">
-                <tr>
-                    <td align="right">First name:</td>
-                    <td><input type="text" name="firstName" value="${requestScope.firstName}"</td>
-                </tr>
-                <tr>
-                    <td align="right">Last name:</td>
-                    <td><input type="text" name="lastName" value="${requestScope.lastName}"></td>
-                </tr>
-                <tr>
-                    <td align="right">Email address:</td>
-                    <td><input type="text" name="emailAddress" value="${requestScope.emailAddress}"></td>
-                </tr>
-                <tr>
-                    <td align="right">Password:</td>
-                    <td><input name="p1" type="password"></td>
-                </tr>
-                <tr>
-                    <td align="right">Retype Password:</td>
-                    <td><input name="p2" type="password"></td>
-                    <td><input type="submit" name="submit" value="Register"></td>
-                </tr>
-            </table>
-        </form>
-        <p><a href="login.jsp">[Back to login screen]</a></p>
-        <jsp:include page="includes/footer.jsp"/>
+<div id="register">
+    <c:if test="${requestScope.error != null}">
+        <font color="red">${requestScope.error}</font><br>
+    </c:if>
+    <form name="data" action="register" method="post" onsubmit="return checkFields (this)">
+        <table align="center" cellspacing="5" border="0">
+            <tr align="center">
+                <td colspan="2">
+                    <h2>New User Register</h2>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">First name:</td>
+                <td><input type="text" name="firstName" value="${requestScope.firstName}"</td>
+            </tr>
+            <tr>
+                <td align="right">Last name:</td>
+                <td><input type="text" name="lastName" value="${requestScope.lastName}"></td>
+            </tr>
+            <tr>
+                <td align="right">Email address:</td>
+                <td><input type="text" name="emailAddress" value="${requestScope.emailAddress}"></td>
+            </tr>
+            <tr>
+                <td align="right">Password:</td>
+                <td><input name="p1" type="password"></td>
+            </tr>
+            <tr>
+                <td align="right">Retype Password:</td>
+                <td><input name="p2" type="password"></td>
+                <td><input type="submit" name="submit" value="Register"></td>
+            </tr>
+        </table>
+    </form>
 </div>
 <script type="text/javascript">
     function checkFields (data) {
