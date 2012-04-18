@@ -35,7 +35,7 @@ public class LogoutServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        String url = "/activeProjects";
+        String url = "/projects";
         
         User user = (User) session.getAttribute("user");
         if (user == null)

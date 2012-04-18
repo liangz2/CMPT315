@@ -5,6 +5,7 @@
 package servlets;
 
 import business.Project;
+import business.User;
 import database.DBUtil;
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Zhengyi
  */
-public class ActiveProjectServelt extends HttpServlet {
+public class ProjectServelt extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -34,19 +35,33 @@ public class ActiveProjectServelt extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = "/main.jsp";
-        String requestedPage = "/projects.jsp";
-        
+        String queryType = request.getParameter("queryType");
         HttpSession session = request.getSession();
-        // obtain currently active projects
-        HashMap<Integer, Project> activeProjects = DBUtil.getActiveProjects();
+        RequestDispatcher dispatcher = null;
+        HashMap<Integer, Project> projects = null;
+        String url = "/main.jsp";
+        String requestedPage = "";
+        if (queryType == null) 
+            queryType = "activeProjects";
         
-        session.setAttribute("activeProjects", activeProjects);
+        switch (queryType) {
+            case "activeProjects":
+                requestedPage = "/projects.jsp";
+                // obtain currently active projects
+                projects = DBUtil.getActiveProjects();
+                break;
+            case "myProjects":
+                requestedPage = "/my_projects.jsp";
+                String email = ((User) session.getAttribute("user")).getEmail();
+                projects = DBUtil.getUserProjects(email);
+                break;
+        }
         request.setAttribute("requestedPage", requestedPage);
+        session.setAttribute(queryType, projects);
         // forward to index page
-        RequestDispatcher dispatcher =
-                getServletContext().getRequestDispatcher(url);
+        dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

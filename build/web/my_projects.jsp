@@ -3,6 +3,7 @@
     Created on : Mar 12, 2012, 12:24:43 PM
     Author     : Zhengyi
 --%>
+<%@page import="java.util.HashMap"%>
 <%@page import="business.User"%>
 <%@page import="business.Project"%>
 <%@page import="java.util.ArrayList"%>
@@ -10,36 +11,39 @@
 <style type="text/css">
     <%@include file="/CSS/wiki.css" %>
 </style>
-<jsp:include page="/includes/header.jsp"/>
 <%
     User user = (User) request.getSession().getAttribute("user");
-    ArrayList<Project> currentProjects = new ArrayList(user.getProjects().values());
+    HashMap<Integer, Project> myProjects = 
+            (HashMap<Integer, Project>)request.getSession().getAttribute("myProjects");
+    Integer[] ids = myProjects.keySet().toArray(new Integer[0]);
+    
 %>
+<div id="projectList">
+    <%for (int i = 0; i < ids.length; i++) {%>
+    <div id="projectDetail">
+        <div class="title">
+            <a href="<%= response.encodeURL("projectDetail?projectId=" + ids[i]) %>">
+                <%= myProjects.get(ids[i]).getName() %>
+            </a>
+            <div class="date">
+                <%= myProjects.get(ids[i]).getCreationTime() %>
+            </div>
+            <div class="description">
+                <p><%= myProjects.get(ids[i]).getDescription() %>
+                </p><hr>
+            </div>
+            <div class="listFooter">
+                Created By: 
+                <i><a href="#"><%= myProjects.get(ids[i]).getCreator() %></a></i>
+                Your Role in this project: <%= myProjects.get(ids[i]).getMyRole() %>
+            </div>
+        </div>
+    </div>
+    <%}%>
+</div>
+                <%--
 
-    <form action="projectDetail" method="post" onsubmit="return getIndex(this)">
-    <table id="activeProjects" cellspacing="2" border="0">
-        <tr align="center">
-            <td><h4>Currently Active Projects</h4></td>
-            <td><h4>Description</h4>
-        </tr>
-        <tr align="center">
-            <td>
-                <select name="projectId" style="width:250px; height:121px" name="activeProject" size="${activeProjects.size()}" onchange="showDetail(this, 'apDescription')">
-                    <c:forEach var="activeProject" items="${activeProjects}">
-                        <option value="${activeProject.id}">${activeProject.name}</option>
-                    </c:forEach>
-                </select>
-            </td>
-            <td>
-                <textarea disabled="true" style="resize: none; background-color: white; color: black" 
-                        wrap="true" id="apDescription" rows="7" cols="30"></textarea>
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="View Project"/>
-    </form>
-    <hr style="width:600px">
-    <form action="projectDetail" method="post" onsubmit="return getIndex(this)">
+<div id="projectList">
     <table id="currentProjects" cellspacing="2" border="0">
         <tr align="center">
             <td><h4>Projects you are in</h4></td>
@@ -61,13 +65,12 @@
             </td>
         </tr>
     </table>
-    <c:forEach var="project" items="${activeProjects}">
+    <c:forEach var="project" items="${myProjects}">
         <input type="hidden" id="${project.id}" value="${project.description}"/>
     </c:forEach>
     <input type="submit" value="View Project"/>
-    </form>
-    <jsp:include page="includes/footer.jsp"/>
 </div>
+
 <script type="text/javascript">
     function showDetail (list, textarea) {
         var index = list.selectedIndex;
@@ -82,7 +85,7 @@
         return true;
     }
 </script>
-<%--
+
 <c:if test="${user.role == 'None'}">
 <a href="requestAccess"><input type="submit" value="Request Acess"></a>
 </c:if>

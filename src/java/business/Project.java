@@ -18,6 +18,7 @@ public class Project implements Serializable {
     private String description;
     private String myRole;
     private String pendingRole;
+    private User creator;
     private Date creationTime;
     private ArrayList<User> users;
 
@@ -51,6 +52,10 @@ public class Project implements Serializable {
      */
     public Date getCreationTime() {
         return creationTime;
+    }
+
+    public User getCreator() {
+        return creator;
     }
 
     public String getPendingRole() {
@@ -95,6 +100,10 @@ public class Project implements Serializable {
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
     
     public void setPendingRole(String pendingRole) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- *
+ * The class that communicates with the database, used by other servlets.
  * @author Zhengyi
  */
 public class DBUtil {
@@ -57,7 +57,7 @@ public class DBUtil {
         ResultSet resultSet = null;
         Connection connection = null;
         String query = "SELECT FisrtName, LastName, EmailAddress, Password "
-                + "UserIsActive, UserCreationTime + 0 FROM User "
+                + "UserIsActive, UserCreationTime FROM User "
                 + "WHERE emailaddress = ?";
         try {
             connection = pool.getConnection();
@@ -75,8 +75,7 @@ public class DBUtil {
                 user.setEmail (resultSet.getString (3));
                 user.setPassword (resultSet.getString (4));
                 user.setIsActive(resultSet.getString(5).equals("1"));
-                Timestamp creationDate = 
-                        new Timestamp(Long.parseLong(resultSet.getString(6)));
+                Date creationDate = resultSet.getDate(6);
                 user.setCreationTime(creationDate);
             }
         } catch (SQLException ex) {
@@ -126,15 +125,16 @@ public class DBUtil {
         Connection connection = null;
         HashMap<Integer, Project> activeProjects = null;
         String query = "SELECT ProjectID, ProjectName, ProjectDescription, "
-                + "ProjectCreationTime"
-                + " FROM Project WHERE ProjectIsActive=true";
+                + "ProjectCreationTime, FirstName, LastName"
+                + " FROM Project INNER JOIN User ON User.EmailAddress=ProjectCreator"
+                + " WHERE ProjectIsActive=true";
         try {
             connection = pool.getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             
             if (activeProjects == null)
-                activeProjects = new HashMap<Integer, Project>();
+                activeProjects = new HashMap<>();
 
             while (resultSet.next()) {
                 Project project = new Project();
@@ -143,6 +143,10 @@ public class DBUtil {
                 project.setName(resultSet.getString(2));
                 project.setDescription(resultSet.getString(3));
                 project.setCreationTime(resultSet.getDate(4));
+                User creator = new User();
+                creator.setFirstName(resultSet.getString(5));
+                creator.setLastName(resultSet.getString(6));
+                project.setCreator(creator);
                 activeProjects.put(id, project);
             }
         } catch (SQLException ex) {
@@ -164,10 +168,11 @@ public class DBUtil {
         PreparedStatement ps = null;
         Connection connection = null;
         HashMap<Integer, Project> userProjects = null;
-        String query = "select project.projectid, "
-                    + "projectname, projectdescription, role from project "
-                    + "inner join wikirecord on project.projectid=wikirecord.projectid "
-                    + "where EmailAddress=? and projectisactive=true";
+        String query = "SELECT Project.ProjectId, ProjectName, ProjectDescription, "
+                + "Role, ProjectCreationTime, FirstName, LastName FROM Project "
+                + "INNER JOIN (WIKIRecord,User) ON Project.ProjectId=WIKIRecord.ProjectId "
+                + "AND WIKIRecord.EmailAddress=User.EmailAddress WHERE EmailAddress=? "
+                + "AND ProjectIsActive=TRUE";
         
         try {
             connection = pool.getConnection();
@@ -176,12 +181,16 @@ public class DBUtil {
             resultSet = ps.executeQuery();
             
             if (userProjects == null)
-                    userProjects = new HashMap<Integer, Project>();
+                    userProjects = new HashMap<>();
             
             while (resultSet.next()) {
-                Project p = new Project(Integer.parseInt(resultSet.getString(1)),
-                        resultSet.getString(2), resultSet.getString(3),
-                        resultSet.getString(4));
+                Project p = new Project();
+                p.setId(Integer.parseInt(resultSet.getString(1)));
+                p.setName(resultSet.getString(2));
+                p.setDescription(resultSet.getString(3));
+                p.setMyRole(resultSet.getString(4));
+                p.setCreationTime(resultSet.getDate(5));
+                p.setCreator(new User(resultSet.getString(6), resultSet.getString(7)));
                 // add projects to the user for future usage
                 userProjects.put(p.getId(), p);
             }            
@@ -268,7 +277,8 @@ public class DBUtil {
      */
     public static void closePreparedStatement (PreparedStatement ps) {
         try {
-            ps.close();
+            if (ps != null)
+                ps.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -279,7 +289,8 @@ public class DBUtil {
      */
     public static void closeStatement (Statement statement) {
         try {
-            statement.close();
+            if (statement != null)
+                statement.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -290,7 +301,8 @@ public class DBUtil {
      */
     public static void closeResultSet (ResultSet rs) {
         try {
-            rs.close();
+            if (rs != null)
+                rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

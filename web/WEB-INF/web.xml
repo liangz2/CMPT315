@@ -2,7 +2,7 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <servlet>
         <servlet-name>ProjectNameServlet</servlet-name>
-        <servlet-class>servlets.ProjectServlet</servlet-class>
+        <servlet-class>servlets.ProjectServlet__</servlet-class>
         <init-param>
             <param-name>projectFilePath</param-name>
             <param-value>/WEB-INF/projects.txt</param-value>
@@ -29,8 +29,8 @@
         <servlet-class>servlets.RemoveUserServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ActiveProjectServlet</servlet-name>
-        <servlet-class>servlets.ActiveProjectServelt</servlet-class>
+        <servlet-name>ProjectServlet</servlet-name>
+        <servlet-class>servlets.ProjectServelt</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProjectNameServlet</servlet-name>
@@ -57,8 +57,8 @@
         <url-pattern>/removeUser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ActiveProjectServlet</servlet-name>
-        <url-pattern>/activeProjects</url-pattern>
+        <servlet-name>ProjectServlet</servlet-name>
+        <url-pattern>/projects</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -67,7 +67,7 @@
     </session-config>
     <welcome-file-list>
         <welcome-file>
-            activeProjects
+            projects
         </welcome-file>
     </welcome-file-list>
 </web-app>

@@ -11,6 +11,19 @@
             (HashMap<Integer, Project>)request.getSession().getAttribute("activeProjects");
     Integer[] ids = activeProjects.keySet().toArray(new Integer[0]);
 %>
+<%--
+<ul id="nav">
+    <li><a href="<%= response.encodeURL("projects") %>" id="homeButton"
+                class="selected">H</a></li>
+    <li><a href="<%= response.encodeURL("main.jsp?requestedPage=create_project.jsp") %>"
+            id="projectButton"
+                class="selected">P</a></li>
+    <li><a href="#" id="requestButton">R</a></li>
+    <li><a href="#" id="uploadButton">U</a></li>
+</ul>--%>
+<div id="title">
+    <h2>Currently Active Projects</h2>
+</div>
 <div id="projectList">
     <%for (int i = 0; i < ids.length; i++) {%>
     <div id="projectDetail">
@@ -23,7 +36,11 @@
             </div>
             <div class="description">
                 <p><%= activeProjects.get(ids[i]).getDescription() %>
-                </p>
+                </p><hr>
+            </div>
+            <div class="listFooter">
+                Created By: 
+                <i><a href="#"><%= activeProjects.get(ids[i]).getCreator() %></a></i>
             </div>
         </div>
     </div>

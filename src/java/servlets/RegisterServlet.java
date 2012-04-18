@@ -8,9 +8,6 @@ import business.User;
 import database.DBUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -51,7 +48,7 @@ public class RegisterServlet extends HttpServlet {
         if (user == null) {
             user = new User(firstName, lastName, emailAddress, password);
             DBUtil.createUser(user);
-            url = "/login.jsp";
+            url = "/user_info.jsp";
             request.setAttribute("registered", "Thank you for joining us, please login now");
         } else {
             url = "/register.jsp";
@@ -66,14 +63,6 @@ public class RegisterServlet extends HttpServlet {
                 dispatcher.forward(request, response);
         out.close();       
     }
-    
-    private Timestamp getTime () {
-        Calendar calendar = Calendar.getInstance();
-        // get the date
-        Date time = calendar.getTime();
-        // return the timesamp with nano second set to be 0
-        return new Timestamp (time.getTime());
-}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

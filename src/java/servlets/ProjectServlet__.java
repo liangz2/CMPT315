@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Zhengyi
  */
-public class ProjectServlet extends HttpServlet {
+public class ProjectServlet__ extends HttpServlet {
 
     /**
      * Processes requests for both HTTP

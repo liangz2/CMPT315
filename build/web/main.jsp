@@ -14,13 +14,16 @@
         requestedPage = request.getParameter("requestedPage");
     String projects = "/projects.jsp";
     String createProject = "create_project.jsp";
-    
-    if (user == null && requestedPage.equals(createProject)) {
-        requestedPage = projects;
-        request.setAttribute("notLogin", "You must login to create your project, or "
-                + "<a href='main.jsp?requestedPage=register.jsp'>register</a>");
-    }
 %>
+<script type="text/javascript">
+    function checkInput(form) {
+        if (form.emailAddress.value != '' &&
+            form.password.value != '')
+            return true;
+        alert ('You must complete all feilds');
+        return false;
+    }
+</script>
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,7 +37,7 @@
         <div id="header"><div id="logo"></div>
             <c:choose>
                 <c:when test="<%= (user == null || user.getEmail().isEmpty()) %>">
-                <form action="login" method="post">
+                    <form action="login" method="post" onsubmit="return checkInput(this)">
                     <div id="login">
                     <table cellspacing="5" border="0">
                         <tr>
@@ -54,20 +57,20 @@
                         </tr> 
                     </table>
                     </div>
-                </form>
+                    </form>
                 </c:when>
                 <c:otherwise>
                     <ul id="options">
                         <li><a href="logout">Logout</a></li>
-                        <li><a href="password_update.jsp">Update Password</a></li>
-                        <li><a href="info_updat.jsp">Update Personal Info</a></li>
+                        <li><a href="projects?queryType=myProjects">My Projects</a></li>
+                        <li><a href="user_info.jsp">My Info</a></li>
                     </ul>
                 </c:otherwise>
             </c:choose>
         </div>
         
         <ul id="nav">
-            <li><a href="<%= response.encodeURL("activeProjects") %>" id="homeButton"
+            <li><a href="<%= response.encodeURL("projects") %>" id="homeButton"
                    <c:if test="<%= requestedPage.equals(projects) %>">
                        class="selected"
                    </c:if>>H</a></li>
@@ -84,15 +87,8 @@
         <!-- end of header part -->
 
         <!-- content part -->
-        <div id="warning">
-            <c:if test="${notLogin != null}">
-                <p><font color="red">${notLogin}</font></p>
-            </c:if>
-        </div>
         <div id="leftContent">
             <jsp:include page="<%= requestedPage %>" />
-            <div id="search">
-            </div>
         </div>
         <div class="clear"></div>
 

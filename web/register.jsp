@@ -4,41 +4,40 @@
     Author     : Zhengyi
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div id="register">
-    <c:if test="${requestScope.error != null}">
-        <font color="red">${requestScope.error}</font><br>
-    </c:if>
-    <form name="data" action="register" method="post" onsubmit="return checkFields (this)">
-        <table align="center" cellspacing="5" border="0">
-            <tr align="center">
-                <td colspan="2">
-                    <h2>New User Register</h2>
-                </td>
-            </tr>
-            <tr>
-                <td align="right">First name:</td>
-                <td><input type="text" name="firstName" value="${requestScope.firstName}"</td>
-            </tr>
-            <tr>
-                <td align="right">Last name:</td>
-                <td><input type="text" name="lastName" value="${requestScope.lastName}"></td>
-            </tr>
-            <tr>
-                <td align="right">Email address:</td>
-                <td><input type="text" name="emailAddress" value="${requestScope.emailAddress}"></td>
-            </tr>
-            <tr>
-                <td align="right">Password:</td>
-                <td><input name="p1" type="password"></td>
-            </tr>
-            <tr>
-                <td align="right">Retype Password:</td>
-                <td><input name="p2" type="password"></td>
-                <td><input type="submit" name="submit" value="Register"></td>
-            </tr>
-        </table>
-    </form>
+<div id="title">
+    <h2>New User Register</h2>
 </div>
+<c:if test="${requestScope.error != null}">
+    <font color="red">${requestScope.error}</font><br>
+</c:if>
+<form name="data" action="register" method="post" onsubmit="return checkFields (this)">
+    <table id="register" align="center" cellspacing="5" border="0">
+        <tr>
+            <td align="right">First name:</td>
+            <td><input type="text" name="firstName" value="${requestScope.firstName}"</td>
+        </tr>
+        <tr>
+            <td align="right">Last name:</td>
+            <td><input type="text" name="lastName" value="${requestScope.lastName}"></td>
+        </tr>
+        <tr>
+            <td align="right">Email address:</td>
+            <td><input type="text" name="emailAddress" value="${requestScope.emailAddress}"></td>
+        </tr>
+        <tr>
+            <td align="right">Password:</td>
+            <td><input name="p1" type="password"></td>
+        </tr>
+        <tr>
+            <td align="right">Retype Password:</td>
+            <td><input name="p2" type="password"></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><input type="submit" name="submit" value="Register"></td>
+        </tr>
+    </table>
+</form>
 <script type="text/javascript">
     function checkFields (data) {
     var errorMsg = "";
@@ -77,7 +76,7 @@
         }
     }
     else {
-        errorMsg = "Password can only consist lower, upper cases and symbols,\n"
+        errorMsg = "Password should consist lower, upper cases and symbols,\n"
             + "also must be within 6 to 12 characters long";
         alert(errorMsg);
         return false;
