@@ -5,16 +5,14 @@
 package servlets;
 
 import business.User;
-import database.ConnectionPool;
+import database.DBUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,6 +33,26 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = "/main.jsp";
+        String leftColumn = (String) request.getParameter("leftColumn");
+        String rightColumn = (String) request.getParameter("rightColumn");
+        String emailAddress = (String) request.getParameter ("emailAddress");
+        String password = (String) request.getParameter ("password");
+            
+        User user = DBUtil.userLogin(emailAddress, password);
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            session.setAttribute("leftColumn", leftColumn);
+            request.setAttribute("rightColumn", rightColumn);
+        }
+        else {
+            request.setAttribute("error", "EmailAdress does not exist or password is incorrect");
+        }
+        RequestDispatcher dispatcher = 
+                getServletContext().getRequestDispatcher (url);
+        dispatcher.forward (request, response);
+        /*
         PrintWriter out = response.getWriter();
         String url = "";
         ServletContext sc = getServletContext();
@@ -45,7 +63,7 @@ public class LoginServlet extends HttpServlet {
         try {
             /*
              * TODO output your page here. You may use following sample code 
-             */
+             
             ConnectionPool pool = ConnectionPool.getInstance();
             connection = pool.getConnection();
             
@@ -94,7 +112,7 @@ public class LoginServlet extends HttpServlet {
             out.println("</html>");
         } finally {            
            out.close();
-        }
+        }*/
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

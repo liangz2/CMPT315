@@ -80,6 +80,7 @@ CREATE TABLE WIKIRecord (
 	EmailAddress VARCHAR (50) NOT NULL,
 	ProjectID INT NOT NULL,
 	Role VARCHAR (15) NOT NULL,
+	JoinTime TIMESTAMP NOT NULL,
 	
 	PRIMARY KEY (ProjectID, EmailAddress),
 	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID),
@@ -88,11 +89,11 @@ CREATE TABLE WIKIRecord (
 );
 
 INSERT INTO WIKIRecord VALUES 
-('hahaha2009@hotmail.com', '1', 'Admin'),
-('hahaha2009@hotmail.com', '2', 'Admin'),
-/*('hahaha2009@hotmail.com', '3', 'Admin'),*/
-('ivy_onlyone@hotmail.com', '1', 'Coord'),
-('evffegg@gmail.com', '1', 'Contri');
+('hahaha2009@hotmail.com', '1', 'Admin', NOW()),
+('hahaha2009@hotmail.com', '2', 'Admin', NOW()),
+/*('hahaha2009@hotmail.com', '3', 'Admin', NOW()),*/
+('ivy_onlyone@hotmail.com', '1', 'Coord', NOW()),
+('evffegg@gmail.com', '1', 'Contri', NOW());
 
 CREATE TABLE RequestTable (
 	UserID VARCHAR (50) NOT NULL,

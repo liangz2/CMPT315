@@ -4,14 +4,14 @@
     Author     : Zhengyi
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div id="title">
+<div id="pageTitle">
     <h2>New User Register</h2>
 </div>
 <c:if test="${requestScope.error != null}">
     <font color="red">${requestScope.error}</font><br>
 </c:if>
 <form name="data" action="register" method="post" onsubmit="return checkFields (this)">
-    <table id="register" align="center" cellspacing="5" border="0">
+    <table id="table" align="center" cellspacing="5" border="0">
         <tr>
             <td align="right">First name:</td>
             <td><input type="text" name="firstName" value="${requestScope.firstName}"</td>

@@ -9,7 +9,7 @@
 <%
     User user = (User) request.getSession().getAttribute("user");
     boolean loggedIn = false;
-    if (user != null)
+    if (user != null && !user.getEmail().isEmpty())
         loggedIn = true;
 %>
 <script type="text/javascript">
@@ -38,12 +38,12 @@
     <li><a href="#" id="requestButton">R</a></li>
     <li><a href="#" id="uploadButton">U</a></li>
 </ul>--%>
-<div id="title">
+<div id="pageTitle">
     <h2>Create New Project</h2>
 </div>
 <body  onload="enableFields(<%= loggedIn %>)">
     <form action="createProject" method="post" onsubmit="return checkForm(this)">
-        <table id="createProject" cellspacing="2" border="0">
+        <table id="table" cellspacing="2" border="0">
             <c:choose>
                 <c:when test="${success != null && success == true}">
                     <tr align="center">

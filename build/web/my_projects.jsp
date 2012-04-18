@@ -18,6 +18,9 @@
     Integer[] ids = myProjects.keySet().toArray(new Integer[0]);
     
 %>
+<div id="pageTitle">
+    <h2>My Projects</h2>
+</div>
 <div id="projectList">
     <%for (int i = 0; i < ids.length; i++) {%>
     <div id="projectDetail">
@@ -35,8 +38,10 @@
             <div class="listFooter">
                 Created By: 
                 <i><a href="#"><%= myProjects.get(ids[i]).getCreator() %></a></i>
-                Your Role in this project: <%= myProjects.get(ids[i]).getMyRole() %>
-            </div>
+                <span style="float: right">
+                    You are a <i><%= myProjects.get(ids[i]).getMyRole() %></i>
+                </span>            
+            </div>                
         </div>
     </div>
     <%}%>

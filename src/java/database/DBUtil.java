@@ -8,6 +8,7 @@ import business.Project;
 import business.User;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -51,6 +52,54 @@ public class DBUtil {
         }
     }
     
+    /**
+     * user login that returns the user info
+     * @param email
+     * @param password
+     * @return 
+     */
+    public static User userLogin (String email, String password) {
+        User user = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        Connection connection = null;
+        String query = "SELECT FisrtName, LastName, EmailAddress "
+                + "UserIsActive, UserCreationTime FROM User "
+                + "WHERE EmailAddress=? AND Password=?";
+        try {
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            ps.setString(2, password);
+            
+            resultSet = ps.executeQuery();
+            
+            // if user user exists
+            if (resultSet.next ()) {
+                user = new User();
+                // obtain user data
+                user.setFirstName (resultSet.getString (1));
+                user.setLastName (resultSet.getString (2));
+                user.setEmail (resultSet.getString (3));
+                user.setIsActive(resultSet.getString(5).equals("1"));
+                Date creationDate = resultSet.getDate(6);
+                user.setCreationTime(creationDate);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            // free up resources
+            DBUtil.closePreparedStatement(ps);
+            DBUtil.closeResultSet(resultSet);
+            pool.freeConnection(connection);
+            return user;
+        }
+    }
+    /**
+     * returns a full user object containing detailed info
+     * @param email
+     * @return 
+     */
     public static User getUser (String email) {
         User user = null;
         PreparedStatement ps = null;
@@ -58,7 +107,7 @@ public class DBUtil {
         Connection connection = null;
         String query = "SELECT FisrtName, LastName, EmailAddress, Password "
                 + "UserIsActive, UserCreationTime FROM User "
-                + "WHERE emailaddress = ?";
+                + "WHERE EmailAddress=?";
         try {
             connection = pool.getConnection();
             ps = connection.prepareStatement(query);
@@ -66,7 +115,7 @@ public class DBUtil {
             
             resultSet = ps.executeQuery();
             
-            // if login successful
+            // if user user exists
             if (resultSet.next ()) {
                 user = new User();
                 // obtain user data
@@ -83,6 +132,7 @@ public class DBUtil {
         } finally {
             // free up resources
             DBUtil.closePreparedStatement(ps);
+            DBUtil.closeResultSet(resultSet);
             pool.freeConnection(connection);
             return user;
         }
@@ -171,7 +221,7 @@ public class DBUtil {
         String query = "SELECT Project.ProjectId, ProjectName, ProjectDescription, "
                 + "Role, ProjectCreationTime, FirstName, LastName FROM Project "
                 + "INNER JOIN (WIKIRecord,User) ON Project.ProjectId=WIKIRecord.ProjectId "
-                + "AND WIKIRecord.EmailAddress=User.EmailAddress WHERE EmailAddress=? "
+                + "AND WIKIRecord.EmailAddress=User.EmailAddress WHERE WIKIRecord.EmailAddress=? "
                 + "AND ProjectIsActive=TRUE";
         
         try {
@@ -249,23 +299,49 @@ public class DBUtil {
     public static boolean createProject (Project p, String email) {
         PreparedStatement ps = null;
         Connection connection = null;
-        String query = "INSERT INTO Project "
+        ResultSet resultSet = null;
+        String pId;
+        Date date = new Date();
+        Timestamp now = new Timestamp(date.getTime());
+        String updateProject = "INSERT INTO Project "
                 + "(Projectname, ProjectDescription, ProjectCreator, ProjectCreationTime, ProjectIsActive)"
-                + " Values (?,?,?,NOW(),true)";
+                + " Values (?,?,?,?,true); ";
+        String updateRecord = "INSERT INTO WIKIRecord Values (?, ?, 'Admin', ?)";
+        String getPId = "select ProjectId FROM Project WHERE ProjectCreator=? "
+                + "AND ProjectCreationTime=?";
         boolean success = false;
         try {
             connection = pool.getConnection();
-            ps = connection.prepareStatement(query);
+            // update the project table
+            ps = connection.prepareStatement(updateProject);
             ps.setString (1, p.getName());
             ps.setString (2, p.getDescription());
             ps.setString(3, email);
+            ps.setTimestamp(4, now);
             
             ps.executeUpdate();
+            // obtain the project id just added by user
+            ps = connection.prepareStatement(getPId);
+            ps.setString(1, email);
+            ps.setTimestamp(2, now);
+            resultSet = ps.executeQuery();
+            if (resultSet.next()) {
+                pId = resultSet.getString(1);
+                // update the record table with the project id and user emailaddress
+                ps = connection.prepareStatement(updateRecord);
+                ps.setString(1, email);
+                ps.setString(2, pId);
+                ps.setTimestamp(3, now);
+                ps.executeUpdate();
+            }
+            else
+                return false;
             success = true;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             DBUtil.closePreparedStatement(ps);
+            DBUtil.closeResultSet(resultSet);
             pool.freeConnection(connection);
             return success;
         }

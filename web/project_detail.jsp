@@ -4,12 +4,17 @@
     Author     : Zhengyi
 --%>
 
+<%@page import="business.Project"%>
+<%@page import="java.util.HashMap"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<jsp:include page="/includes/header.jsp"/>
 <jsp:useBean id="user" scope="session" class="business.User" />
-<div id="projectDetail">
-    <h1>Project#  ${user.selectedProject.id} -  ${user.selectedProject.name}<br>
+<%
+    HashMap<Integer, Project> activeProjects = 
+            (HashMap<Integer, Project>)request.getSession().getAttribute("activeProjects");
+    Integer[] ids = activeProjects.keySet().toArray(new Integer[0]);
+%>
+    <h4>Project#  ${user.selectedProject.id} -  ${user.selectedProject.name}<br>
         <c:choose>
             <c:when test="${user.selectedProject.myRole == 'N/A'}">
                 <font size="4">
@@ -29,9 +34,8 @@
         </c:choose>
 
         <font size="2">Number of registered users in this project: ${user.selectedProject.users.size()}</font>
-    </h1>
+    </h4>
 
-    <p><font size="2"><a href="index.jsp">[Home]</a></font></p>
     <h3>
         Project Description
     </h3>
@@ -81,7 +85,6 @@
 
             </c:when>
         </c:choose>
-</div>
         
 <script type="text/javascript">
     function getUser() {

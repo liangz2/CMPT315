@@ -21,7 +21,7 @@
     <li><a href="#" id="requestButton">R</a></li>
     <li><a href="#" id="uploadButton">U</a></li>
 </ul>--%>
-<div id="title">
+<div id="pageTitle">
     <h2>Currently Active Projects</h2>
 </div>
 <div id="projectList">

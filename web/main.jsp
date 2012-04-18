@@ -9,12 +9,16 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
     User user = (User) request.getSession().getAttribute("user");
-    String requestedPage = (String) request.getAttribute("requestedPage");
-    if (requestedPage == null)
-        requestedPage = request.getParameter("requestedPage");
-    String projects = "/projects.jsp";
+    String leftContent = (String) request.getSession().getAttribute("leftContent");
+    String rightContent = (String) request.getAttribute("rightContent");
+    String errorMessage = (String) request.getAttribute("error");
+    if (rightContent == null)
+        rightContent = request.getParameter("rightContent");
+    String projects = "projects.jsp";
     String createProject = "create_project.jsp";
+    String projectDeatil = "project_detail.jsp";
 %>
+
 <script type="text/javascript">
     function checkInput(form) {
         if (form.emailAddress.value != '' &&
@@ -22,6 +26,10 @@
             return true;
         alert ('You must complete all feilds');
         return false;
+    }
+    
+    function buildPage() {
+        
     }
 </script>
 <!DOCTYPE html>
@@ -51,6 +59,8 @@
                         <tr>
                             <td></td>
                             <td align="right">
+                                <input type="hidden" name="leftContent" value="<%= leftContent %>">
+                                <input type="hidden" name="rightContent" value="<%= rightContent %>">
                                 <input id="loginButton" type="submit" value="Login">
                                 <a href="main.jsp?requestedPage=register.jsp" id="registerButton"></a>
                             </td>
@@ -71,29 +81,30 @@
         
         <ul id="nav">
             <li><a href="<%= response.encodeURL("projects") %>" id="homeButton"
-                   <c:if test="<%= requestedPage.equals(projects) %>">
+                   <c:if test="<%= leftContent.equals(projects) %>">
                        class="selected"
                    </c:if>>H</a></li>
-            <li><a href="<%= response.encodeURL("main.jsp?requestedPage=create_project.jsp") %>"
+            <li><a href="<%= response.encodeURL("main.jsp?rightContent=create_project.jsp") %>"
                    id="projectButton"
-                   <c:if test="<%= requestedPage.equals(createProject) %>">
+                   <c:if test="<%= rightContent.equals(createProject) %>">
                        class="selected"
                    </c:if>>P</a></li>
             <li><a href="#" id="requestButton">R</a></li>
             <li><a href="#" id="uploadButton">U</a></li>
         </ul>
         <div class="clear"></div>
-
+        <c:if test="<%= errorMessage != null %>">
+            <h3 id="errorMessage"><%= errorMessage %></h3>
+        </c:if>
         <!-- end of header part -->
 
         <!-- content part -->
         <div id="leftContent">
-            <jsp:include page="<%= requestedPage %>" />
+            <jsp:include page="<%= leftContent %>" />
         </div>
-        <div class="clear"></div>
 
         <div id="rightContent">
-            
+            <jsp:include page="<%= rightContent %>" />
         </div>
         <div class="clear"></div>
 

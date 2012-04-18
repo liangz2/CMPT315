@@ -40,23 +40,32 @@ public class ProjectServelt extends HttpServlet {
         RequestDispatcher dispatcher = null;
         HashMap<Integer, Project> projects = null;
         String url = "/main.jsp";
+        String leftContent = "";
+        String rightContent = "";
         String requestedPage = "";
         if (queryType == null) 
             queryType = "activeProjects";
         
         switch (queryType) {
             case "activeProjects":
-                requestedPage = "/projects.jsp";
+                leftContent = "projects.jsp";
+                rightContent = "project_detail.jsp";
                 // obtain currently active projects
                 projects = DBUtil.getActiveProjects();
                 break;
             case "myProjects":
-                requestedPage = "/my_projects.jsp";
+                leftContent = "/my_projects.jsp";
+                rightContent = "project_detail.jsp";
                 String email = ((User) session.getAttribute("user")).getEmail();
                 projects = DBUtil.getUserProjects(email);
                 break;
+            case "projectDetail":
+                leftContent = "/project_detail.jsp";
+                int pId = (int) (request.getParameter("pId").charAt(0) & 0x0f);
+                break;
         }
-        request.setAttribute("requestedPage", requestedPage);
+        session.setAttribute("leftContent", leftContent);
+        request.setAttribute("rightContent", rightContent);
         session.setAttribute(queryType, projects);
         // forward to index page
         dispatcher = getServletContext().getRequestDispatcher(url);
