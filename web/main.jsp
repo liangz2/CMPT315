@@ -95,6 +95,7 @@
         <div class="clear"></div>
         <c:if test="<%= errorMessage != null %>">
             <h3 id="errorMessage"><%= errorMessage %></h3>
+            <div class="clear"></div>
         </c:if>
         <!-- end of header part -->
 

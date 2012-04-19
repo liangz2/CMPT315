@@ -280,7 +280,6 @@ public class DBUtil {
             while (resultSet.next()) 
                 users.add(new User(resultSet.getString(1), resultSet.getString(2),
                                 resultSet.getString(3), resultSet.getString(4)));
-            System.out.println(users.size());
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -306,7 +305,7 @@ public class DBUtil {
         String updateProject = "INSERT INTO Project "
                 + "(Projectname, ProjectDescription, ProjectCreator, ProjectCreationTime, ProjectIsActive)"
                 + " Values (?,?,?,?,true); ";
-        String updateRecord = "INSERT INTO WIKIRecord Values (?, ?, 'Admin', ?)";
+        String updateRecord = "INSERT INTO WIKIRecord Values (?, ?, '0', ?)";
         String getPId = "select ProjectId FROM Project WHERE ProjectCreator=? "
                 + "AND ProjectCreationTime=?";
         boolean success = false;
@@ -376,8 +375,8 @@ public class DBUtil {
         }
     }
     
-    public static Role[] getRoles () {
-        Role[] roles = new Role[4];
+    public static ArrayList<Role> getRoles () {
+        ArrayList<Role> roles = new ArrayList<>();
         Statement statement = null;
         Connection connection = null;
         ResultSet resultSet = null;
@@ -385,7 +384,10 @@ public class DBUtil {
         try {
             connection = pool.getConnection();
             statement = connection.createStatement();
-            
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next())
+                roles.add(new Role(resultSet.getString(1), 
+                        resultSet.getString(2)));
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {

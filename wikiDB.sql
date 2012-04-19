@@ -58,7 +58,7 @@ CREATE TABLE Role (
 	RoleID INT NOT NULL,
 	RoleName VARCHAR (15) NOT NULL,
 	
-	PRIMARY KEY (RoleName)
+	PRIMARY KEY (RoleID, RoleName)
 );
 
 INSERT INTO Role VALUES
@@ -78,21 +78,21 @@ INSERT INTO Role VALUES
 CREATE TABLE WIKIRecord (
 	EmailAddress VARCHAR (50) NOT NULL,
 	ProjectID INT NOT NULL,
-	Role VARCHAR (15) NOT NULL,
+	Role INT NOT NULL,
 	JoinTime TIMESTAMP NOT NULL,
 	
 	PRIMARY KEY (ProjectID, EmailAddress),
 	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID),
 	FOREIGN KEY (EmailAddress) REFERENCES User (EmailAddress),
-	FOREIGN KEY (Role) REFERENCES Role (RoleName)
+	FOREIGN KEY (Role) REFERENCES Role (RoleID)
 );
 
 INSERT INTO WIKIRecord VALUES 
-('hahaha2009@hotmail.com', '1', 'Administrator', NOW()),
-('hahaha2009@hotmail.com', '2', 'Administrator', NOW()),
+('hahaha2009@hotmail.com', '1', '0', NOW()),
+('hahaha2009@hotmail.com', '2', '0', NOW()),
 /*('hahaha2009@hotmail.com', '3', 'Admin', NOW()),*/
-('ivy_onlyone@hotmail.com', '1', 'Coordinator', NOW()),
-('evffegg@gmail.com', '1', 'Contributor', NOW());
+('ivy_onlyone@hotmail.com', '1', '1', NOW()),
+('evffegg@gmail.com', '1', '2', NOW());
 
 CREATE TABLE ProjectDtail (
 	ProjectID INT NOT NULL,
@@ -106,14 +106,14 @@ CREATE TABLE ProjectDtail (
 CREATE TABLE RequestTable (
 	UserID VARCHAR (50) NOT NULL,
 	ProjectID INT NOT NULL,
-	RequestRole VARCHAR (15) NOT NULL,
+	RequestRole INT NOT NULL,
 	SelfIntro VARCHAR (150) NOT NULL,
 	
 	PRIMARY KEY (UserID),
 	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID) ON DELETE CASCADE,
-	FOREIGN KEY (RequestRole) REFERENCES Role (RoleName)
+	FOREIGN KEY (RequestRole) REFERENCES Role (RoleID)
 );
 
 INSERT INTO RequestTable VALUES
-('ivy_onlyone@hotmail.com', '1', 'Coordinator', 'hello!!'),
-('evffegg@gmail.com', '1', 'Contributor', 'i am good!!!');
+('ivy_onlyone@hotmail.com', '1', '0', 'hello!!'),
+('evffegg@gmail.com', '1', '1', 'i am good!!!');

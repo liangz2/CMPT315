@@ -24,6 +24,7 @@
 <div id="pageTitle">
     <h2>Currently Active Projects</h2>
 </div>
+<div class="clear"></div>
 <div id="projectList">
     <%for (int i = 0; i < ids.length; i++) {%>
     <div id="projectDetail">

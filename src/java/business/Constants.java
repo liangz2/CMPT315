@@ -9,11 +9,11 @@ package business;
  * @author Icewill
  */
 public class Constants {
-    public static final String ADMIN = "Administrator";
-    public static final String COORD = "Coordinator";
-    public static final String CONTRIB = "Contributor";
-    public static final String OBSERV = "Observer";
-    public static final String INACTIVE = "Inactive";
-    public static final String PENDING = "Pending";
+    public static final String ADMIN = "0";
+    public static final String COORD = "1";
+    public static final String CONTRIB = "2";
+    public static final String OBSERV = "3";
+    public static final String INACTIVE = "4";
+    public static final String PENDING = "5";
     public static final String NONE = "N/A";
 }

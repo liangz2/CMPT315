@@ -5,9 +5,11 @@
 package servlets;
 
 import business.Project;
+import business.Role;
 import business.User;
 import database.DBUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -54,7 +56,7 @@ public class ProjectServelt extends HttpServlet {
                 projects = DBUtil.getActiveProjects();
                 break;
             case "myProjects":
-                leftContent = "/my_projects.jsp";
+                leftContent = "my_projects.jsp";
                 rightContent = "project_detail.jsp";
                 String email = ((User) session.getAttribute("user")).getEmail();
                 projects = DBUtil.getUserProjects(email);
@@ -66,6 +68,8 @@ public class ProjectServelt extends HttpServlet {
             case "joinProject":
                 leftContent = "project_detail.jsp";
                 rightContent = "join_options.jsp";
+                ArrayList<Role> roles = DBUtil.getRoles();
+                request.setAttribute("roles", roles);
                 break;
         }
         session.setAttribute("leftContent", leftContent);

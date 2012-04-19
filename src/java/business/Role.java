@@ -11,9 +11,15 @@ package business;
 public class Role {
     String id;
     String name;
+    
     public Role () {
         id = "";
         name = "";
+    }
+    
+    public Role (String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public String getId() {
