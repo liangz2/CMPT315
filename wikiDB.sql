@@ -62,13 +62,12 @@ CREATE TABLE Role (
 );
 
 INSERT INTO Role VALUES
-('1', 'Admin'),
-('2', 'Coord'),
-('3', 'Contri'),
-('4', 'Obser'),
-('5', 'Inactive'),
-('6', 'Pending'),
-('0', 'N/A');
+('0', 'Administrator'),
+('1', 'Coordinator'),
+('2', 'Contributor'),
+('3', 'Observer'),
+('4', 'Inactive'),
+('5', 'Pending');
 
 /*****************************************************************
 * Record table that keeps track of user with projects. This table
@@ -89,16 +88,26 @@ CREATE TABLE WIKIRecord (
 );
 
 INSERT INTO WIKIRecord VALUES 
-('hahaha2009@hotmail.com', '1', 'Admin', NOW()),
-('hahaha2009@hotmail.com', '2', 'Admin', NOW()),
+('hahaha2009@hotmail.com', '1', 'Administrator', NOW()),
+('hahaha2009@hotmail.com', '2', 'Administrator', NOW()),
 /*('hahaha2009@hotmail.com', '3', 'Admin', NOW()),*/
-('ivy_onlyone@hotmail.com', '1', 'Coord', NOW()),
-('evffegg@gmail.com', '1', 'Contri', NOW());
+('ivy_onlyone@hotmail.com', '1', 'Coordinator', NOW()),
+('evffegg@gmail.com', '1', 'Contributor', NOW());
+
+CREATE TABLE ProjectDtail (
+	ProjectID INT NOT NULL,
+	PageName VARCHAR (50) NOT NULL,
+	OriginLocation VARCHAR (50) NOT NULL,
+	LinkedLocation VARCHAR (50) NOT NULL,
+	
+	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID)
+);
 
 CREATE TABLE RequestTable (
 	UserID VARCHAR (50) NOT NULL,
 	ProjectID INT NOT NULL,
 	RequestRole VARCHAR (15) NOT NULL,
+	SelfIntro VARCHAR (150) NOT NULL,
 	
 	PRIMARY KEY (UserID),
 	FOREIGN KEY (ProjectID) REFERENCES Project (ProjectID) ON DELETE CASCADE,
@@ -106,5 +115,5 @@ CREATE TABLE RequestTable (
 );
 
 INSERT INTO RequestTable VALUES
-('ivy_onlyone@hotmail.com', '1', 'Coord'),
-('evffegg@gmail.com', '1', 'Contri');
+('ivy_onlyone@hotmail.com', '1', 'Coordinator', 'hello!!'),
+('evffegg@gmail.com', '1', 'Contributor', 'i am good!!!');

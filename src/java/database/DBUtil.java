@@ -5,6 +5,7 @@
 package database;
 
 import business.Project;
+import business.Role;
 import business.User;
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 public class DBUtil {
     private static ConnectionPool pool = ConnectionPool.getInstance ();
     
-    public static Project getProject (int pId) {
+    public static Project getProject (String pId) {
         PreparedStatement ps = null;
         Project project = null;
         ResultSet resultSet = null;
@@ -28,7 +29,7 @@ public class DBUtil {
         try {
             connection = pool.getConnection ();
             ps = connection.prepareStatement (query);
-            ps.setString(1, Integer.toString(pId));
+            ps.setString(1, pId);
             resultSet = ps.executeQuery();
             
             if (resultSet.next()) {
@@ -63,7 +64,7 @@ public class DBUtil {
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         Connection connection = null;
-        String query = "SELECT FisrtName, LastName, EmailAddress "
+        String query = "SELECT FirstName, LastName, EmailAddress, "
                 + "UserIsActive, UserCreationTime FROM User "
                 + "WHERE EmailAddress=? AND Password=?";
         try {
@@ -81,9 +82,8 @@ public class DBUtil {
                 user.setFirstName (resultSet.getString (1));
                 user.setLastName (resultSet.getString (2));
                 user.setEmail (resultSet.getString (3));
-                user.setIsActive(resultSet.getString(5).equals("1"));
-                Date creationDate = resultSet.getDate(6);
-                user.setCreationTime(creationDate);
+                user.setIsActive(resultSet.getString(4).equals("1"));
+                user.setCreationTime(resultSet.getDate(5));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -105,7 +105,7 @@ public class DBUtil {
         PreparedStatement ps = null;
         ResultSet resultSet = null;
         Connection connection = null;
-        String query = "SELECT FisrtName, LastName, EmailAddress, Password "
+        String query = "SELECT FirstName, LastName, EmailAddress, Password "
                 + "UserIsActive, UserCreationTime FROM User "
                 + "WHERE EmailAddress=?";
         try {
@@ -265,9 +265,9 @@ public class DBUtil {
         PreparedStatement ps = null;
         ArrayList<User> users = null;
         Connection connection = null;
-        String query = "select firstname, lastname, emailaddress, role"
-                    + " from wikirecord inner join user on user.emailaddress="
-                    + "wikirecord.EmailAddress where projectid=?";
+        String query = "SELECT FirstName, LastName, User.EmailAddress, Role"
+                    + " FROM User INNER JOIN WIKIRecord on User.EmailAddress="
+                    + "WIKIRecord.EmailAddress WHERE ProjectId=?";
         try {
             connection = pool.getConnection();
             ps = connection.prepareStatement(query);
@@ -275,12 +275,12 @@ public class DBUtil {
             resultSet = ps.executeQuery();
             
             if (users == null)
-                users = new ArrayList<User>();
+                users = new ArrayList<>();
             
             while (resultSet.next()) 
                 users.add(new User(resultSet.getString(1), resultSet.getString(2),
-                                resultSet.getString(3), resultSet.getString(4), ""));
-                        
+                                resultSet.getString(3), resultSet.getString(4)));
+            System.out.println(users.size());
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -344,6 +344,55 @@ public class DBUtil {
             DBUtil.closeResultSet(resultSet);
             pool.freeConnection(connection);
             return success;
+        }
+    }
+    
+    /**
+     * join a project, add user info into the record table
+     * @param pId
+     * @param email
+     * @param role
+     * @return 
+     */
+    public static boolean joinProject (String pId, String email, String role) {
+        String updateRecord = "INSERT INTO WIKIRecord Values (?, ?, ?, NOW())";
+        PreparedStatement ps = null;
+        Connection connection = null;
+        boolean success = false;
+        try {
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(updateRecord);
+            ps.setString(1, email);
+            ps.setString(2, pId);
+            ps.setString(3, role);
+            
+            success = true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            return success;
+        }
+    }
+    
+    public static Role[] getRoles () {
+        Role[] roles = new Role[4];
+        Statement statement = null;
+        Connection connection = null;
+        ResultSet resultSet = null;
+        String query = "SELECT * from role where roleid < 4 order by roleid asc";
+        try {
+            connection = pool.getConnection();
+            statement = connection.createStatement();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            DBUtil.closeStatement(statement);
+            DBUtil.closeResultSet(resultSet);
+            pool.freeConnection(connection);
+            return roles;
         }
     }
     

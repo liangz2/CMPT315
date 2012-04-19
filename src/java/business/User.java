@@ -38,13 +38,6 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
     
-    public User (String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-    }
-    
     public User (String firstName, String lastName, String email, String password, Timestamp creationTime) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -53,12 +46,11 @@ public class User implements Serializable {
         this.creationTime = creationTime;
     }
     
-    public User (String firstName, String lastName, String email, String relativeRole, String password) {
+    public User (String firstName, String lastName, String email, String relativeRole) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.relativeRole = relativeRole;
-        this.password = "";
     }
 
     public boolean isIsActive() {

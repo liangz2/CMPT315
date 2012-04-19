@@ -4,22 +4,24 @@
  */
 package servlets;
 
+import business.Project;
 import business.User;
 import database.DBUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Zhengyi
+ * @author Icewill
  */
-public class RegisterServlet extends HttpServlet {
+@WebServlet(name = "JoinProjectServlet", urlPatterns = {"/joinProject"})
+public class JoinProjectServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -34,37 +36,22 @@ public class RegisterServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String url = "";
-        String rightContent = "";
-        ServletContext sc = getServletContext();
-
-        // obtain user info
-        String firstName = (String) request.getParameter ("firstName");
-        String lastName = (String) request.getParameter ("lastName");
-        String emailAddress = (String) request.getParameter ("emailAddress");
-        String password = (String) request.getParameter ("p1");
-        // check if user exists
-        User user = DBUtil.getUser(emailAddress);
-        if (user == null) {
-            user = new User(firstName, lastName, emailAddress, password);
-            DBUtil.createUser(user);
-            url = "/user_info.jsp";
-            request.setAttribute("registered", "Thank you for joining us, please login now");
-        } else {
-            url = "/main.jsp";
-            rightContent = "register.jsp";
-            request.removeAttribute("password");
-            request.setAttribute("error", "This email is already registered");
-            request.setAttribute("firstName", firstName);
-            request.setAttribute("lastName", lastName);
-            request.setAttribute("emailAddress", emailAddress);
-        }
-
-        request.setAttribute("rightContent", rightContent); 
-        RequestDispatcher dispatcher = sc.getRequestDispatcher(url);
-                dispatcher.forward(request, response);
-        out.close();       
+        String url = "/main.jsp";
+        HttpSession session = request.getSession();
+        Project project = (Project) session.getAttribute("selectedProject");
+        User user = (User) session.getAttribute("user");
+        String role = request.getParameter("role");
+        
+        if (DBUtil.joinProject(Integer.toString(project.getId()), 
+                user.getEmail(), role)) 
+            request.setAttribute("error", "You have submitted the request");
+        else
+            request.setAttribute("error", "Unable to join the project");
+        
+        
+        RequestDispatcher dispatcher = 
+                getServletContext().getRequestDispatcher(url);
+        dispatcher.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

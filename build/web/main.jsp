@@ -62,7 +62,7 @@
                                 <input type="hidden" name="leftContent" value="<%= leftContent %>">
                                 <input type="hidden" name="rightContent" value="<%= rightContent %>">
                                 <input id="loginButton" type="submit" value="Login">
-                                <a href="main.jsp?requestedPage=register.jsp" id="registerButton"></a>
+                                <a href="main.jsp?rightContent=register.jsp" id="registerButton"></a>
                             </td>
                         </tr> 
                     </table>

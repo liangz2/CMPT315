@@ -63,6 +63,10 @@ public class ProjectServelt extends HttpServlet {
                 leftContent = "/project_detail.jsp";
                 int pId = (int) (request.getParameter("pId").charAt(0) & 0x0f);
                 break;
+            case "joinProject":
+                leftContent = "project_detail.jsp";
+                rightContent = "join_options.jsp";
+                break;
         }
         session.setAttribute("leftContent", leftContent);
         request.setAttribute("rightContent", rightContent);

@@ -34,16 +34,16 @@
             <div class="date">
                 <%= activeProjects.get(ids[i]).getCreationTime() %>
             </div>
-            <div class="description">
-                <p><%= activeProjects.get(ids[i]).getDescription() %>
-                </p><hr>
-            </div>
-            <div class="listFooter">
-                Created By: 
-                <i><a href="#"><%= activeProjects.get(ids[i]).getCreator() %></a></i>
-            </div>
         </div>
-    </div>
+        <div class="description">
+            <p><%= activeProjects.get(ids[i]).getDescription() %>
+            </p><hr>
+        </div>
+        <div class="listFooter">
+            Created By: 
+            <i><%= activeProjects.get(ids[i]).getCreator() %></i>
+        </div>
+    </div>        
     <%}%>
 </div>
 

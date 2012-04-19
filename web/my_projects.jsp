@@ -31,18 +31,18 @@
             <div class="date">
                 <%= myProjects.get(ids[i]).getCreationTime() %>
             </div>
-            <div class="description">
-                <p><%= myProjects.get(ids[i]).getDescription() %>
-                </p><hr>
-            </div>
-            <div class="listFooter">
-                Created By: 
-                <i><a href="#"><%= myProjects.get(ids[i]).getCreator() %></a></i>
-                <span style="float: right">
-                    You are a <i><%= myProjects.get(ids[i]).getMyRole() %></i>
-                </span>            
-            </div>                
         </div>
+        <div class="description">
+            <p><%= myProjects.get(ids[i]).getDescription() %>
+            </p><hr>
+        </div>
+        <div class="listFooter">
+            Created By: 
+            <i><a href="#"><%= myProjects.get(ids[i]).getCreator() %></a></i>
+            <span style="float: right">
+                You are a <i><%= myProjects.get(ids[i]).getMyRole() %></i>
+            </span>            
+        </div>                
     </div>
     <%}%>
 </div>

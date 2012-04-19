@@ -34,34 +34,26 @@ public class ProjectDetailServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Project newProject = null;
         response.setContentType("text/html;charset=UTF-8");
-        String url = "/project_detail.jsp";
+        String url = "/main.jsp";
+        String rightContent = "/project_detail.jsp";
         ServletContext sc = request.getServletContext();
         HttpSession session = request.getSession();
 
         String pId = request.getParameter("projectId");
+        User user = (User) session.getAttribute("user");
         if (pId == null)
             pId = (String) request.getAttribute("projectId");
 
-        int projectId = Integer.parseInt(pId);
-        User user = (User) session.getAttribute("user");
-
-        if (user.getProjects().get(projectId) == null) {
-            ArrayList<Project> activeProjects = (ArrayList<Project>) session.getAttribute("activeProjects");
-            for (Project activeProject: activeProjects) 
-                if (activeProject.getId() == projectId)
-                    newProject = activeProject;
-
-            // get the users of that particular project
-            newProject.setUsers(DBUtil.getProjectUsers(pId));
-            newProject.setMyRole("N/A");
-            user.setSelectedProject(newProject);
+        Project project = DBUtil.getProject(pId);
+        project.setUsers(DBUtil.getProjectUsers(pId));
+        if (user != null)
+            project.setMyRole(user.getEmail());
+        if (project != null) {
+            session.setAttribute("selectedProject", project);
         }
-        else {
-            user.setSelectedProject(projectId);
-            user.getSelectedProject().setUsers(DBUtil.getProjectUsers(pId));
-        }
+        
+        request.setAttribute("rightContent", rightContent);
         RequestDispatcher dispatcher = sc.getRequestDispatcher (url);
         dispatcher.forward (request, response);
 

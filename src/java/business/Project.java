@@ -21,6 +21,7 @@ public class Project implements Serializable {
     private User creator;
     private Date creationTime;
     private ArrayList<User> users;
+    private ArrayList<String> pages;
 
     public ArrayList<User> getUsers() {
         return users;
@@ -30,6 +31,7 @@ public class Project implements Serializable {
         name = "";
         description = "";
         myRole = "";
+        pendingRole = "";
     }
     
     public Project (int id, String name, String description, String myRole) {
@@ -38,12 +40,9 @@ public class Project implements Serializable {
         this.description = description;
         this.myRole = myRole;
     }
-    /**
-     * returns creation time up to date only
-     * @return 
-     */
-    public String getCreationDate() {
-        return creationTime.toString();
+
+    public ArrayList<String> getPages() {
+        return pages;
     }
     
     /**
@@ -86,8 +85,17 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public void setMyRole(String mymyRole) {
-        this.myRole = mymyRole;
+    public void setMyRole(String email) {
+        myRole = "N/A";
+        if (users != null)
+            for (User user: users)
+                if (user.getEmail().equals(email))
+                    myRole = user.getRelativeRole();
+        
+    }
+
+    public void setPages(ArrayList<String> pages) {
+        this.pages = pages;
     }
 
     public void setId(int id) {

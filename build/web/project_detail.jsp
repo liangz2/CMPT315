@@ -4,88 +4,99 @@
     Author     : Zhengyi
 --%>
 
+<%@page import="business.User"%>
 <%@page import="business.Project"%>
 <%@page import="java.util.HashMap"%>
+<%@page import="business.Constants" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<jsp:useBean id="user" scope="session" class="business.User" />
 <%
-    HashMap<Integer, Project> activeProjects = 
-            (HashMap<Integer, Project>)request.getSession().getAttribute("activeProjects");
-    Integer[] ids = activeProjects.keySet().toArray(new Integer[0]);
+    Project selectedProject = (Project) request.getSession().getAttribute("selectedProject");
+    User user = (User) (request.getSession().getAttribute("user"));
+    String leftContent = (String) request.getSession().getAttribute("leftContent");
+    String myProjects = "my_projects.jsp";
+    String myRole = "";
 %>
-    <h4>Project#  ${user.selectedProject.id} -  ${user.selectedProject.name}<br>
-        <c:choose>
-            <c:when test="${user.selectedProject.myRole == 'N/A'}">
-                <font size="4">
-                Your are not in this project
-                </font>
-            </c:when>
-            <c:when test="${user.selectedProject.myRole == 'Pending'}">
-                <font size="4">
-                You have applied for '${user.selectedProject.pendingRole}' in the project
-                </font>
-            </c:when>
-            <c:otherwise>
-                <font size="4">
-                Your role in this project: ${user.selectedProject.myRole}
-                </font>
-            </c:otherwise>
-        </c:choose>
 
-        <font size="2">Number of registered users in this project: ${user.selectedProject.users.size()}</font>
-    </h4>
+<%if (selectedProject == null) {%>
+    <h2 id="pageTitle">Select a project to view details</h2>
+<%return;} else {myRole = selectedProject.getMyRole();%>
+    <h2 id="pageTitle">Project#  <%= selectedProject.getId() %></h2>
+<%}%>
 
-    <h3>
-        Project Description
-    </h3>
-    <p style="border:ridge; width:350px;" align="left">${user.selectedProject.description}</p>
-        <br><br>
+<div id="projectDetail">
+    <div class="title">
+        <span style="font-size: 25px"><%= selectedProject.getName() %></span>
+    </div>
+    <div class="description">
+        <%= selectedProject.getDescription() %> 
+        <p style="float: right; font-size: 13px; font-style: italic; color:white">
+            Number of users: <%= selectedProject.getUsers().size() %></p>
+        <div class="clear"><hr></div>
+    </div>
+    <c:if test="<%= leftContent.equals(myProjects) %>">
         <c:choose>
-            <c:when test="${user.selectedProject.myRole != 'Pending' && user.selectedProject.myRole != 'N/A'}">
-                <font color="green">Here are currently active users in the project</font>
-                <form action="removeUser" method="post" onsubmit="return getUser()">
-                <table cellspace="2" border="1">
-                    <tr align="center">
-                        <td style="width:120px">First Name</td>
-                        <td style="width:120px">Last Name</td>
-                        <td>Email Address</td>
-                        <td>Role</td>
-                        <c:if test="${user.selectedProject.myRole == 'Admin'}">
-                            <td>Remove</td>
+        <c:when test="<%= !myRole.equals(Constants.PENDING) && !myRole.equals(Constants.NONE) %>">
+            <font color="green">Here are currently active users in the project</font>
+            <form action="removeUser" method="post" onsubmit="return getUser()">
+            <table id="table" cellspace="2" border="0">
+                <tr align="center">
+                    <td style="width:120px">First Name</td>
+                    <td style="width:120px">Last Name</td>
+                    <td>Email Address</td>
+                    <td>Role</td>
+                    <c:if test="<%= myRole.equals(Constants.ADMIN) %>">
+                        <td>Remove</td>
+                    </c:if>
+                </tr>
+                <% for (User u: selectedProject.getUsers()) { %>
+                    <c:choose>
+                        <c:when test="<%= u.getEmail().equals(user.getEmail()) %>" ><tr align="center" style="color:red"></c:when>
+                        <c:otherwise><tr align="center"></c:otherwise>
+                    </c:choose>
+                        <td><%= u.getFirstName() %></td>
+                        <td><%= u.getLastName() %></td>
+                        <td><%= u.getEmail() %></td>
+                        <td><%= u.getRelativeRole() %></td>
+                        <c:if test="<%= myRole.equals(Constants.ADMIN) %>">
+                            <td>
+                                <input name="removeEmail"
+                                    <c:if test="<%= u.getEmail() == user.getEmail() %>">
+                                    disabled="true"
+                                    </c:if>
+                                    type="checkbox" value="<%= u.getEmail() %>"/>
+                            </td>
                         </c:if>
                     </tr>
-                    <c:forEach var="u" items="${user.selectedProject.users}">
-                        <c:choose>
-                            <c:when test="${u.email == user.email}" ><tr align="center" style="color:red"></c:when>
-                            <c:otherwise><tr align="center"></c:otherwise>
-                        </c:choose>
-                            <td>${u.firstName}</td>
-                            <td>${u.lastName}</td>
-                            <td>${u.email}</td>
-                            <td>${u.relativeRole}</td>
-                            <c:if test="${user.selectedProject.myRole == 'Admin'}">
-                                <td>
-                                    <input name="removeEmail"
-                                        <c:if test="${u.email == user.email}">
-                                        disabled="true"
-                                        </c:if>
-                                        type="checkbox" value="${u.email}"/>
-                                </td>
-                            </c:if>
-                        </tr>
-                    </c:forEach>
+                    <%}%>
                 </table>
                 <c:if test="${user.selectedProject.myRole == 'Admin'}">
-                    <p><input type="submit" value="Remove Selected Users" /></p>
+                    <p><input type="submit" value="R" /></p>
                 </c:if>    
-                </form>
+            </form>
+        </c:when>
+        </c:choose>
+    </c:if>
+    <div class="listFooter">
+        <c:choose>
+            <c:when test="<%= myRole.isEmpty() %>">
+                You have to login to see more options
             </c:when>
-            <c:when test="${user.selectedProject.myRole == 'N/A'}">
-
+            <c:when test="<%= myRole.equals(Constants.ADMIN) %>">
+                You are a <i><%= myRole %></i>
+                <a id="editButton" href="projectDetail?queryType=projectDetail">
+                    E
+                </a>
+            </c:when>
+            <c:when test="<%= myRole.equals(Constants.NONE) %>">
+                You are not in this project
+                <a id="joinButton" href="projectServlet?queryType=joinProject">
+                    j
+                </a>
             </c:when>
         </c:choose>
+    </div>
         
+</div>
 <script type="text/javascript">
     function getUser() {
         var emails = document.getElementsByName("removeEmail");
@@ -116,4 +127,10 @@
         alert ('You must select at least one user to continue.')
         return false;
     }
+    <%--
+    function forwardPage() {
+        <jsp:forward page="projectDetail?projectId=<%= selectedProject.getId() %>">
+            <jsp:param name="selectedProject" value="<%= selectedProject %>" /> 
+        </jsp:forward>
+    }--%>
 </script>
