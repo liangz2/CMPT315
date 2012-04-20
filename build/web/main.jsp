@@ -92,7 +92,7 @@
             <li><a href="#" id="requestButton">R</a></li>
             <li><a href="#" id="uploadButton">U</a></li>
         </ul>
-        <div class="clear"></div>
+                   
         <c:if test="<%= errorMessage != null %>">
             <h3 id="errorMessage"><%= errorMessage %></h3>
             <div class="clear"></div>

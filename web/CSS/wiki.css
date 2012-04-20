@@ -15,7 +15,9 @@ body {
 .clear {
     clear:both;
 }
-
+a {
+    text-decoration: none;
+}
 /*===========================================*/
 #options {
     font-size: 12px;
@@ -196,13 +198,9 @@ body {
     float: left;
 }
 
-#leftContent a {
-    text-decoration: none;
-}
 /*===========================================*/
 #rightContent {
     width: 53%;
-    text-align: center;
     margin-right: 10px;
     float:right;
 }
@@ -256,8 +254,8 @@ body {
 }
 /*===========================================*/
 #table {
-    margin: 20px auto;
-    padding: 10px;
+    margin: 40px auto;
+    padding: 20px;
     background: dimgray;
     border: solid 1px red;
     text-shadow: 1px 1px 3px white;

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Zhengyi
  */
-public class ProjectServelt extends HttpServlet {
+public class ProjectServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -44,7 +44,6 @@ public class ProjectServelt extends HttpServlet {
         String url = "/main.jsp";
         String leftContent = "";
         String rightContent = "";
-        String requestedPage = "";
         if (queryType == null) 
             queryType = "activeProjects";
         
@@ -58,12 +57,9 @@ public class ProjectServelt extends HttpServlet {
             case "myProjects":
                 leftContent = "my_projects.jsp";
                 rightContent = "project_detail.jsp";
-                String email = ((User) session.getAttribute("user")).getEmail();
-                projects = DBUtil.getUserProjects(email);
-                break;
-            case "projectDetail":
-                leftContent = "/project_detail.jsp";
-                int pId = (int) (request.getParameter("pId").charAt(0) & 0x0f);
+                User user = (User) session.getAttribute("user");
+                if (user != null)
+                    projects = DBUtil.getUserProjects(user.getEmail());
                 break;
             case "joinProject":
                 leftContent = "project_detail.jsp";
@@ -72,9 +68,9 @@ public class ProjectServelt extends HttpServlet {
                 request.setAttribute("roles", roles);
                 break;
         }
+        session.setAttribute(queryType, projects);
         session.setAttribute("leftContent", leftContent);
         request.setAttribute("rightContent", rightContent);
-        session.setAttribute(queryType, projects);
         // forward to index page
         dispatcher = getServletContext().getRequestDispatcher(url);
         dispatcher.forward(request, response);

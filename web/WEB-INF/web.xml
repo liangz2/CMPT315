@@ -30,7 +30,7 @@
     </servlet>
     <servlet>
         <servlet-name>ProjectServlet</servlet-name>
-        <servlet-class>servlets.ProjectServelt</servlet-class>
+        <servlet-class>servlets.ProjectServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProjectNameServlet</servlet-name>

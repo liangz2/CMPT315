@@ -21,10 +21,7 @@
     <li><a href="#" id="requestButton">R</a></li>
     <li><a href="#" id="uploadButton">U</a></li>
 </ul>--%>
-<div id="pageTitle">
-    <h2>Currently Active Projects</h2>
-</div>
-<div class="clear"></div>
+    <h2 id="pageTitle">Currently Active Projects</h2>
 <div id="projectList">
     <%for (int i = 0; i < ids.length; i++) {%>
     <div id="projectDetail">
@@ -37,8 +34,8 @@
             </div>
         </div>
         <div class="description">
-            <p><%= activeProjects.get(ids[i]).getDescription() %>
-            </p><hr>
+            <%= activeProjects.get(ids[i]).getDescription() %>
+            <hr>
         </div>
         <div class="listFooter">
             Created By: 

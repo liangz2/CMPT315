@@ -4,6 +4,7 @@
     Author     : Zhengyi
 --%>
 
+<%@page import="business.Role"%>
 <%@page import="business.User"%>
 <%@page import="business.Project"%>
 <%@page import="java.util.HashMap"%>
@@ -15,7 +16,7 @@
     String leftContent = (String) request.getSession().getAttribute("leftContent");
     String myProjects = "my_projects.jsp";
     String projectDetail = "project_detail.jsp";
-    String myRole = "";
+    Role myRole = null;
 %>
 
 <%if (selectedProject == null) {%>
@@ -79,7 +80,7 @@
         </c:if>
         <div class="listFooter">
             <c:choose>
-                <c:when test="<%= myRole.isEmpty() %>">
+                <c:when test="<%= myRole == null %>">
                     You have to login to see more options
                 </c:when>
                 <c:when test="<%= myRole.equals(Constants.ADMIN)%>">

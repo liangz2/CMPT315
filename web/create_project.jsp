@@ -38,9 +38,7 @@
     <li><a href="#" id="requestButton">R</a></li>
     <li><a href="#" id="uploadButton">U</a></li>
 </ul>--%>
-<div id="pageTitle">
-    <h2>Create New Project</h2>
-</div>
+<h2 id="pageTitle">Create New Project</h2>
 <body  onload="enableFields(<%= loggedIn %>)">
     <form action="createProject" method="post" onsubmit="return checkForm(this)">
         <table id="table" cellspacing="2" border="0">

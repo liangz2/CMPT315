@@ -34,7 +34,7 @@ public class DBUtil {
             
             if (resultSet.next()) {
                 project = new Project ();
-                project.setId(Integer.parseInt(resultSet.getString("projectid")));
+                project.setId(resultSet.getInt("projectid"));
                 project.setName(resultSet.getString("projectname"));
                 project.setDescription(resultSet.getString("projectdescription"));
             }
@@ -188,7 +188,7 @@ public class DBUtil {
 
             while (resultSet.next()) {
                 Project project = new Project();
-                int id = Integer.parseInt(resultSet.getString(1));
+                int id = resultSet.getInt(1);
                 project.setId(id);
                 project.setName(resultSet.getString(2));
                 project.setDescription(resultSet.getString(3));
@@ -235,10 +235,10 @@ public class DBUtil {
             
             while (resultSet.next()) {
                 Project p = new Project();
-                p.setId(Integer.parseInt(resultSet.getString(1)));
+                p.setId(resultSet.getInt(1));
                 p.setName(resultSet.getString(2));
                 p.setDescription(resultSet.getString(3));
-                p.setMyRole(resultSet.getString(4));
+                p.setMyRole(new Role(resultSet.getInt(4)));
                 p.setCreationTime(resultSet.getDate(5));
                 p.setCreator(new User(resultSet.getString(6), resultSet.getString(7)));
                 // add projects to the user for future usage
@@ -256,11 +256,42 @@ public class DBUtil {
     }
     
     /**
+     * obtain the role of the user with that emailadress
+     * @param pId
+     * @param email
+     * @return 
+     */
+    public static Role getMyRole (String pId, String email) {
+        String query = "SELECT Role FROM WIKIRecord WHERE ProjectID=? AND "
+                + "EmailAddress=?";
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        Role role = null;
+        try {
+            connection = pool.getConnection();
+            ps = connection.prepareStatement(query);
+            ps.setString(1, pId);
+            ps.setString(2, email);
+            
+            resultSet = ps.executeQuery();
+            if (resultSet.next())
+                role = new Role(resultSet.getInt(1));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            DBUtil.closeResultSet(resultSet);
+            pool.freeConnection(connection);
+            return role;
+        }
+    }
+    /**
      * obtain all users that registered under a project by project id
      * @param pId
      * @return 
      */
-    public static ArrayList<User> getProjectUsers (String pId) {        
+    public static ArrayList<User> getProjectUsers (int pId) {        
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         ArrayList<User> users = null;
@@ -271,7 +302,7 @@ public class DBUtil {
         try {
             connection = pool.getConnection();
             ps = connection.prepareStatement(query);
-            ps.setString(1, pId);
+            ps.setInt(1, pId);
             resultSet = ps.executeQuery();
             
             if (users == null)
@@ -375,6 +406,10 @@ public class DBUtil {
         }
     }
     
+    /**
+     * obtain the list of roles
+     * @return 
+     */
     public static ArrayList<Role> getRoles () {
         ArrayList<Role> roles = new ArrayList<>();
         Statement statement = null;
@@ -386,7 +421,7 @@ public class DBUtil {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             while (resultSet.next())
-                roles.add(new Role(resultSet.getString(1), 
+                roles.add(new Role(resultSet.getInt(1), 
                         resultSet.getString(2)));
         } catch (SQLException ex) {
             ex.printStackTrace();

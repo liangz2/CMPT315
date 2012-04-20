@@ -16,7 +16,7 @@ public class Project implements Serializable {
     private int id;
     private String name;
     private String description;
-    private String myRole;
+    private Role myRole;
     private String pendingRole;
     private User creator;
     private Date creationTime;
@@ -30,11 +30,10 @@ public class Project implements Serializable {
     public Project () {
         name = "";
         description = "";
-        myRole = "";
         pendingRole = "";
     }
     
-    public Project (int id, String name, String description, String myRole) {
+    public Project (int id, String name, String description, Role myRole) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,7 +60,7 @@ public class Project implements Serializable {
         return pendingRole;
     }
 
-    public String getMyRole() {
+    public Role getMyRole() {
         return myRole;
     }
 
@@ -85,13 +84,8 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public void setMyRole(String email) {
-        myRole = "N/A";
-        if (users != null)
-            for (User user: users)
-                if (user.getEmail().equals(email))
-                    myRole = user.getRelativeRole();
-        
+    public void setMyRole(Role role) {
+        myRole = role;
     }
 
     public void setPages(ArrayList<String> pages) {

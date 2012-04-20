@@ -18,9 +18,7 @@
     Integer[] ids = myProjects.keySet().toArray(new Integer[0]);
     
 %>
-<div id="pageTitle">
-    <h2>My Projects</h2>
-</div>
+<h2 id="pageTitle">My Projects</h2>
 <div id="projectList">
     <%for (int i = 0; i < ids.length; i++) {%>
     <div id="projectDetail">

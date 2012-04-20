@@ -8,7 +8,6 @@ import business.Project;
 import business.User;
 import database.DBUtil;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -46,9 +45,9 @@ public class ProjectDetailServlet extends HttpServlet {
             pId = (String) request.getAttribute("projectId");
 
         Project project = DBUtil.getProject(pId);
-        project.setUsers(DBUtil.getProjectUsers(pId));
         if (user != null)
-            project.setMyRole(user.getEmail());
+                project.setMyRole(DBUtil.getMyRole(pId, user.getEmail()));
+
         if (project != null) {
             session.setAttribute("selectedProject", project);
         }
